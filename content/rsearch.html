@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>R help: search results</title>
+<link rel="stylesheet" href="chrome://sciviewsk/skin/rsearch.css" type="text/css" />
+<script type="text/javascript">
+
+function _getWindowByURI(uri) {
+	var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
+		.getService(Components.interfaces.nsIWindowMediator);
+	en = wm.getEnumerator("");
+
+	if (uri) {
+		var win;
+		while (en.hasMoreElements()) {
+			win = en.getNext();
+			if ((win.location.href == uri) ||
+				(win.location.href.lastIndexOf(uri) == win.location.href.length
+				- uri.length)) return(win);
+		}
+	}
+	return(null);
+}
+
+var rHelpWin, sv;
+
+function askR(topic) {
+	if (!topic)	return;
+
+	var cmd = 'local({ svtmp <- help.search("' + topic + '")[];' +
+		'cat(svtmp$pattern, "\\n"); ' +
+		'if (nrow(svtmp$matches)) {' +
+		'svtmp$matches <- cbind(svtmp$matches, Path = apply(matrix(svtmp$matches[, c(1,3)], ncol=2), 1, function(z) c(help(z[1],  package = z[2]))));' +
+		'write.table(svtmp$matches, sep=";", row.names = F, col.names = F, quote = F); ' +
+		'}; ' +
+		'rm(svtmp); }); ';
+
+	sv.r.evalCallback(cmd, displayResults);
+}
+
+function appendElem(parent, tagName, textContent, attributes) {
+	var el = document.createElement(tagName);
+
+	if (textContent) el.textContent = textContent;
+
+	if (attributes) {
+		for (i in attributes)
+			el.setAttribute(i, attributes[i]);
+	}
+	if (parent) {
+		if (typeof parent == "string")
+			parent = document.getElementById(parent);
+
+		if (parent) {
+			if (parent.appendChild) {
+				parent.appendChild(el);
+			} else if (parent.appendElem) {
+				parent.appendElem(el);
+			}
+		}
+	}
+	return(el);
+}
+
+function displayResults(data) {
+	if (!data) return;
+
+	var doc = document;
+	appendElem(doc.body, "h1", "Search results");
+	var out = appendElem(doc.body, "div");
+	data = data.split(/[\r\n]+/);
+
+	appendElem(out, "p", 'Search text was: "' + sv.tools.strings.trim(data[0]) + '"');
+	if (data.length == 1) {
+		appendElem(out, "p", "Nothing found.");
+		return;
+	}
+
+	var prevPkg = "", fnList, li, el, p, pkgList;
+	var resTable = appendElem(out, "table", "", {cellpadding: 2, id: "resultTable"});
+
+	for (var i = 1; i < data.length; i++) {
+		var di = data[i].split(/\s*;\s*/);
+
+		curPkg = di[2];
+		if (curPkg != prevPkg) {
+			var th = appendElem(appendElem(resTable, "tr"), "th", "",
+				{colspan: 2});
+			appendElem(th, "a", "Package: " + curPkg,
+				{href: "file://" + di[3] + "/html/00Index.html"});
+		}
+		prevPkg = curPkg;
+
+		var tr = appendElem(resTable, "tr");
+		appendElem(appendElem(tr, "td"), "a", di[0], {href: "file://" + di[4]});
+		appendElem(tr, "td", di[1]);
+	}
+}
+
+function rHelp (topic, pkg) {
+	var res = false;
+
+	if (!topic && !pkg) {
+		return(false);
+	} else {
+		var cmd = '';
+		cmd += pkg? ' package = "' + pkg + '", ' : "";
+		cmd += topic? ' topic = "' + topic + '", ' : "";
+		//cmd = 'cat(unclass(help(' + cmd + ' htmlhelp = TRUE)))';
+		// For R 2.10:
+		cmd = 'cat(getHelpURL(help(' + cmd + ' help_type = "html")))';
+
+		res = sv.r.evalCallback(cmd, function(path) {
+			rHelpWin.go(path, Components.interfaces.nsIWebNavigation
+				.LOAD_FLAGS_REPLACE_HISTORY);
+		});
+	}
+	return(res);
+}
+
+
+function init() {
+	var mainWindow = _getWindowByURI("chrome://komodo/content/komodo.xul");
+
+	sv = mainWindow.sv;
+	rHelpWin = sv.command.RHelpWin;
+
+	var topic = decodeURIComponent(document.location.search.replace(/^\?/, ""));
+
+	if (topic.indexOf("file:") == 0) {
+		topic = topic.substr(5);
+
+		var content = document.createElement("body");
+		content.innerHTML = sv.tools.file.read(topic);
+		rHelpWin.document.title = document.title =
+			content.firstChild.getAttribute("title");
+		document.body = content;
+	} else {
+		var matches = topic.match(/([\w\.\-]+)::([\w\.\-\[]+)/i);
+		if (matches) {
+			rHelp(matches[2], matches[1]);
+		} else {
+			askR(topic);
+		}
+	}
+}
+
+</script>
+</head>
+
+<body onload="init();"></body>
+</html>

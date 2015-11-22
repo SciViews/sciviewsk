@@ -1,0 +1,66 @@
+.historyPre{
+	margin:0px;
+	padding:0px;
+	font-family: Monaco, "Courier new", monospace;
+}
+
+.historyListitem{
+	border-bottom: solid #999999 1px;
+}
+
+.historyListitem[selected="true"]{
+	background-color: inherit;
+	color: yellow;
+}
+
+.consoleInput{
+	border-top: 1px solid #666666 ;
+	color: blue;
+	font-family: Monaco, "Courier New", monospace;
+	margin:0px;
+}
+
+.consoleOutput{
+	color:black;
+	font-family: Monaco, "Courier New", monospace;
+	margin-bottom: 10px;
+	margin-top: 0px;
+}
+
+#sciviews_rconsole_console_input{
+	-moz-appearance: none;
+	border-top: solid 1px #666666;
+	border-bottom:none;
+	border-left: none;
+	border-right:none;
+	font-family: Monaco, "Courier New", monospace;
+	font-weight: bold;
+	background-color: #dddddd ;
+}
+
+#sciviews_rconsole_console_splitter{
+	-moz-appearance: none;
+	background-color: #dddddd ;
+}
+
+#sciviews_rconsole_history_filter{
+	-moz-appearance: none;
+	background-image: url("chrome://sciviewsk/skin/images/filter.png");
+	background-position: left ;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	margin-top: 0px;
+	border:1px solid gray;
+	font-weight:bold;
+}
+
+#sciviews_rconsole_completion_filter{
+	-moz-appearance: none;
+	background-image: url("chrome://sciviewsk/skin/images/filter.png");
+	background-position: left ;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	margin-top: 0px;
+	border:1px solid gray;
+	font-weight:bold;
+}

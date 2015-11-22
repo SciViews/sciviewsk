@@ -1,0 +1,362 @@
+<?xml version="1.0"?>
+	<!-- ***** BEGIN LICENSE BLOCK *****
+	Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+	The contents of this file are subject to the Mozilla Public License
+	Version 1.1 (the "License"); you may not use this file except in
+	compliance with the License. You may obtain a copy of the License at
+	http://www.mozilla.org/MPL/
+
+	Software distributed under the License is distributed on an "AS IS"
+	basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+	License for the specific language governing rights and limitations
+	under the License.
+
+	The Original Code is SciViews-K by Philippe Grosjean et al.
+
+	Contributor(s):
+	Philippe Grosjean
+	Romain Francois
+	Kamil Barton
+	ActiveState Software Inc (code inspired from)
+
+	Alternatively, the contents of this file may be used under the terms of
+	either the GNU General Public License Version 2 or later (the "GPL"), or
+	the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+	in which case the provisions of the GPL or the LGPL are applicable instead
+	of those above. If you wish to allow use of your version of this file only
+	under the terms of either the GPL or the LGPL, and not to allow others to
+	use your version of this file under the terms of the MPL, indicate your
+	decision by deleting the provisions above and replace them with the notice
+	and other provisions required by the GPL or the LGPL. If you do not delete
+	the provisions above, a recipient may use your version of this file under
+	the terms of any one of the MPL, the GPL or the LGPL.
+
+	***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN"
+"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % sciviewskDTD SYSTEM "chrome://sciviewsk/locale/sciviewsk.dtd">
+%sciviewskDTD;
+]>
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.p.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://sciviewsk/skin/sciviewsk.css" type="text/css"?>
+
+<overlay id="sciviewsRObjectsOverlay" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js"/>
+	<script type="application/x-javascript" src="chrome://sciviewsk/content/js/robjects.js"/>
+
+	<popupset id="extensionPopupSet">
+		<menupopup id="rObjectsContext" onpopupshowing="sv.robjects.contextOnShow(event);">
+			<menuitem id="menu_robjects_insertfullname"
+				class="primary_menu_item"
+				oncommand="sv.robjects.insertName(true)"
+				accesskey="F"
+				label="&sciviews.robjects.insFullName;"
+				acceltext="Ins" />
+			<menuitem id="menu_cmd_robjects_insertquoted"
+				label="&sciviews.robjects.insertQuoted;"
+				oncommand="sv.robjects.insertName(false, true);"
+				accesskey="&sciviews.robjects.insertQuoted.acc;"
+				acceltext="Shift+Ins" />
+			<menuitem id="menu_robjects_insertname"
+				label="&sciviews.robjects.insName;"
+				oncommand="sv.robjects.insertName(false)"
+				accesskey="I"
+				acceltext="Ctrl+Ins" />
+
+			<menuseparator keep="false" intoplevel="true"/>
+
+			<menuitem id="cmd_robjects_removeobj"
+				label="&sciviews.robjects.rmObj;"
+				oncommand="sv.robjects.removeSelected(event.shiftKey)"
+				accesskey="R"
+				acceltext="Del"
+				testDisableIf="t:noDelete"
+				key="key_cmd_delete" />
+			<menuitem id="menu_cmd_robjects_deletenow"
+				label="&sciviews.robjects.deleteNow;"
+				oncommand="sv.robjects.removeSelected(true);"
+				class="menuitem-iconic list-item-remove-icon"
+				acceltext="Shift+Del"
+				testDisableIf="t:noDelete"
+				accesskey="&sciviews.robjects.deleteNow.acc;" />
+
+			<menuseparator keep="false" intoplevel="true"/>
+			
+			<menuitem id="cmd_robjects_summary"
+				label="&sciviews.robjects.summary;"
+				oncommand="sv.robjects.do('summary')"
+				testDisableIf="t:isFunction t:isEnvironment"
+				accesskey="S" />
+			<menuitem id="cmd_robjects_print"
+				label="&sciviews.robjects.print;"
+				oncommand="sv.robjects.do('print')"
+				testDisableIf="t:isPackage"
+				accesskey="P" />
+			<menuitem id="cmd_robjects_plot"
+				label="&sciviews.robjects.plot;"
+				oncommand="sv.robjects.do('plot')"
+				testDisableIf="t:isFunction t:isEnvironment"
+				accesskey="O"/>
+			<menuitem id="cmd_robjects_str"
+				label="&sciviews.robjects.str;"
+				oncommand="sv.robjects.do('str')"
+				testDisableIf="t:isPackage"
+				accesskey="T"/>
+
+			<menuseparator keep="false" intoplevel="true"/>
+			
+			<menuitem id="menu_cmd_robjects_selectall"
+				label="&sciviews.robjects.selectAll;"
+				oncommand="sv.robjects.selection.selectAll();"
+				accesskey="&sciviews.robjects.selectAll.acc;"
+				acceltext="Ctrl+A" />
+			<menuitem id="menu_cmd_robjects_selectsiblings"
+				label="&sciviews.robjects.selectSiblings;"
+				oncommand="sv.robjects.selectAllSiblings(sv.robjects.selection.currentIndex);"
+				accesskey="&sciviews.robjects.selectSiblings.acc;"
+				acceltext="Ctrl+Shift+A" />
+
+			<menuseparator keep="false" intoplevel="true"/>
+			
+			<menuitem id="menu_cmd_robjects_write_table"
+				class="menuitem-iconic save-buffer-icon"
+				label="&sciviews.robjects.write_table;"
+				oncommand="sv.robjects.do('write.table')"
+				testDisableIf="t:cannotSaveToFile"
+				accesskey="T"/>
+			<menuitem id="menu_cmd_robjects_save"
+			class="menuitem-iconic save-buffer-icon"
+				label="&sciviews.robjects.save;"
+				oncommand="sv.robjects.do('save')"
+				testDisableIf="t:cannotSave"
+				accesskey="S" />
+
+			<menuseparator keep="false" intoplevel="true"/>
+			
+			<menuitem id="menu_cmd_robjects_help"
+				label="&sciviews.robjects.help;"
+				oncommand="sv.robjects.do('help')"
+				class="menuitem-iconic help-icon"
+				testDisableIf="t:multipleSelection t:noHelp"
+				accesskey="H" />
+		</menupopup>
+	</popupset>
+
+	<broadcasterset id="broadcasterset_global">
+		<broadcaster id="cmd_robjects_viewSearchPath"
+			tooltiptext="&sciviews.robjects.tab;: &sciviews.robjects.showHide;"
+			label="&sciviews.robjects.showHide;" splitter="bottom_splitter"
+			box="robjects_searchpath_panel"
+			oncommand="sv.robjects.toggleViewSearchPath(event);"
+			checked="true" state="open"/>
+	</broadcasterset>
+
+	<menupopup id="tabPicker_popup">
+		<menuitem id="show_robjects_tab"
+			insertbefore="show_project_tab,show_places_tab"
+			observes="show_sciviews_robjects_tab"
+			oncommand="ko.uilayout.ensureTabShown('sciviews_robjects_tab', true)"
+			label="&sciviews.robjects.tab;"/>
+	</menupopup> <!-- or insertafter="show_runoutput_tab,show_codebrowser_tab" -->
+
+	<menupopup id="menu_view_tabs_popup">
+		<menuitem id="show_robjects_tab2"
+			insertbefore="show_project_tab2,show_places_tab2"
+			class="menuitem-iconic-wide"
+			observes="show_sciviews_robjects_tab"
+			oncommand="ko.uilayout.ensureTabShown('sciviews_robjects_tab', true)"
+			label="&sciviews.robjects.tab;" type="checkbox"/>
+	</menupopup> <!-- or insertafter="show_codebrowser_tab2" class="menuitem-iconic-wide" -->
+
+	<tabbox id="leftTabBox">
+		<tabs id="project_toolbox_tabs">
+			<tab id="sciviews_robjects_tab" label="&sciviews.robjects.tab;"
+			insertbefore="project_tab, places_tab"
+			onclick="sv.robjects.getPackageList(false);"
+			tooltiptext="&sciviews.robjects.tip;"/>
+		</tabs> <!-- or insertafter="project_tab,codebrowser_tab" -->
+		<tabpanels id="project_toolbox_tabpanels">
+			<tabpanel flex="1" id="sciviews_robjects_tabpanel"
+				insertbefore="projectviewbox,placesViewbox">
+				<!-- or insertafter="projectviewbox,codebrowserviewbox" -->
+				<vbox flex="1" id="sciviews_robjects_vbox">
+					<hbox align="center" id="sciviews_robjects_hbox">
+						<toolbarbutton id="sciviews_robjects_refresh_button"
+							tooltiptext="&sciviews.robjects.refresh.tip;"
+							buttonstyle="pictures"
+							label="&sciviews.robjects.refresh;"
+							class="refresh-icon"
+							oncommand="sv.robjects.smartRefresh(true);"/>
+						<!-- or oncommand="sv.robjects.refreshAll();"-->
+						<toolbarbutton id="sciviews_robjects_searchpath_button"
+							observes="cmd_robjects_viewSearchPath"
+							tooltiptext="&sciviews.robjects.showHide.tip;"
+							buttonstyle="pictures"
+							class="searchPath-icon"
+							checked="true"
+							persist="state checked"/>
+						<toolbarbutton id="r_objects_pkg_menu"
+							buttonstyle="pictures"
+							class="robjects-pkg-icon"
+							type="menu"
+							orient="horizontal">
+							
+							<menupopup>
+								<menuitem id="r_objects_pkg_load" label="Load packages..."
+									accesskey="l" class="menuitem-iconic r-pkg-load-icon"
+									oncommand="sv.r.pkg.load();"/>
+								<menuitem id="r_objects_pkg_unload" label="Unload..."
+									accesskey="l" class="menuitem-iconic r-pkg-unload-icon"
+									oncommand="sv.r.pkg.unload();"/>
+								<menuitem id="r_objects_wkspce_load" label="Attach workspace..."
+									accesskey="a" class="menuitem-iconic r-data-attach"
+									oncommand="sv.r.loadWorkspace(null, true);"/>
+								<menuitem id="r_objects_pkg_install" label="Install..."
+									accesskey="i" class="menuitem-iconic r-pkg-install-icon"
+									oncommand="sv.r.pkg.install();"/>
+								<menuitem id="r_objects_pkg_installLocal" label="Install from local files..."
+									accesskey="c" class="menuitem-iconic r-pkg-install-local-icon"
+									oncommand="sv.r.pkg.install(null, 'local');"/>
+								<menuitem id="r_objects_pkg_update" label="Update"
+									accesskey="u" class="menuitem-iconic r-pkg-update-icon"
+									oncommand="sv.r.pkg.update();"/>
+								<menuitem id="r_objects_pkg_remove" label="Remove..."
+									accesskey="r" class="menuitem-iconic r-pkg-remove-icon"
+									oncommand="sv.r.pkg.remove();"/>
+								
+								<menuseparator/>
+								
+								<menuitem id="r_cran_mirror" label="Select CRAN mirror"
+									accesskey="S" class="menuitem-iconic r-cran-mirror-icon"
+									oncommand="sv.r.pkg.chooseCRANMirror();"/>
+								<menuitem id="r_repositories" label="Select R repositories"
+									accesskey="r" class="menuitem-iconic r-repositories-icon"
+									oncommand="sv.r.pkg.repositories();"/>
+							</menupopup>
+						</toolbarbutton>
+						
+						<toolbarseparator style="min-width:10px;" flex="1"/>
+						
+						<toolbarbutton id="sciviews_robjects_filter"
+							tooltiptext="&sciviews.robjects.filter.tip;"
+							buttonstyle="pictures" type="menu" orient="horizontal"
+							class="rightarrow-button-a r-objects-filter">
+							
+							<menupopup id="sciviews_robjects_filterPopup">
+								<menuitem id="sciviews_robjects_context_filterByName"
+									label="&sciviews.robjects.filterByName;"
+									checked="true" accesskey="n" type="checkbox"
+									oncommand="sv.robjects.setFilterBy(this, 'name')"/>
+								<menuitem id="sciviews_robjects_context_filterByClass"
+									label="&sciviews.robjects.filterByClass;"
+									accesskey="c" type="checkbox"
+									oncommand="sv.robjects.setFilterBy(this, 'class')"/>
+								<menuitem id="sciviews_robjects_context_filterByGroup"
+									label="&sciviews.robjects.filterByGroup;"
+									accesskey="g" type="checkbox"
+									oncommand="sv.robjects.setFilterBy(this, 'group')"/>
+								
+								<menuseparator/>
+								
+								<menuitem id="sciviews_robjects_context_clrFilter"
+									label="&sciviews.robjects.clrFilter;" accesskey="l"
+									oncommand="document.getElementById('sciviews_robjects_filterbox').value = ''; sv.robjects.applyFilter();"/>
+							</menupopup>
+						</toolbarbutton>
+						
+						<textbox id="sciviews_robjects_filterbox" flex="1"
+							type="search" timeout="500"
+							tooltiptext="&sciviews.robjects.filter.tip;"
+							style="min-width: 40px; max-width: 200px; margin-right: 0px;"
+							class="search-box"
+							oncommand="sv.robjects.applyFilter();"
+							emptytext="&sciviews.robjects.filterEmptyText;"/>
+					</hbox>
+					
+					<vbox id="robjects_searchpath_panel"
+						persist="height collapsed" state="collapsed" flex="1">
+						
+						<listbox flex="1" id="sciviews_robjects_searchpath_listbox"
+							ondragdrop="nsDragAndDrop.drop(event, sv.robjects.packageListObserver);"
+							ondragover="nsDragAndDrop.dragOver(event, sv.robjects.packageListObserver);"
+							ondraggesture="nsDragAndDrop.startDrag(event, sv.robjects.packageListObserver);"
+							onkeypress="sv.robjects.packageListKeyEvent(event);"
+							oncommand="sv.robjects.packageSelectedEvent(event);"/>
+					</vbox>
+					
+					<splitter id="sciviews_robjects_splitter" collapse="before"
+						resizeafter="closest" resizebefore="closest" persist="state"
+						observes="cmd_robjects_viewSearchPath">
+						<grippy/>
+					</splitter>
+					
+					<vbox flex="5">
+						<tree flex="1" id="sciviews_robjects_objects_tree"
+							persist="sortDirection sortResource"
+							sortDirection="ascending" sortResource="r-name"
+							enableColumnDrag="true"
+							onselect="sv.robjects.onEvent(event);"
+							onkeypress="sv.robjects.onEvent(event);">
+							
+							<treecols>
+								<treecol id="r-name" label="&sciviews.robjects.Name;"
+									primary="true" sortActive="true"
+									persist="width ordinal hidden"
+									onclick="sv.robjects.sort(this);" ordinal="1" flex="4"/>
+								<splitter class="tree-splitter" ordinal="2"/>
+								<treecol id="r-dims" label="&sciviews.robjects.Dims;"
+									persist="width ordinal hidden"
+									onclick="sv.robjects.sort(this);" flex="1" ordinal="3"/>
+								<splitter class="tree-splitter" ordinal="4"/>
+								<treecol id="r-group" label="&sciviews.robjects.Group;"
+									flex="2" hidden="true" persist="width ordinal hidden"
+									onclick="sv.robjects.sort(this);" ordinal="5"/>
+								<splitter class="tree-splitter" ordinal="6"/>
+								<treecol id="r-class" label="&sciviews.robjects.Class;"
+									flex="2" hidden="true" persist="width ordinal hidden"
+									onclick="sv.robjects.sort(this);" ordinal="7"/>
+								<splitter class="tree-splitter" ordinal="8"/>
+								<treecol id="r-fullName" label="&sciviews.robjects.FullName;"
+									persist="width ordinal hidden" flex="1" hidden="true" ordinal="9"/>
+							</treecols>
+							
+							<treechildren id="sciviews_robjects_objects_tree_main"
+								ondraggesture="nsDragAndDrop.startDrag(event, sv.robjects.listObserver);"
+								ondragdrop="nsDragAndDrop.drop(event, sv.robjects.listObserver);"
+								ondragover="nsDragAndDrop.dragOver(event, sv.robjects.listObserver);"
+								onclick="sv.robjects.onEvent(event);"
+								ondblclick="sv.robjects.onEvent(event);"
+								context="rObjectsContext">
+							</treechildren>
+						</tree>
+					</vbox>
+					
+					<vbox>
+						<hbox align="center">
+							<toolbarbutton id="sciviews_robjects_foldAll_button"
+								label="Fold All"
+								buttonstyle="pictures"
+								class="robjects-fold-all-icon"
+								oncommand="sv.robjects.foldAll(true);"
+								tooltiptext="&sciviews.robjects.foldAll;"/>
+							<toolbarbutton id="sciviews_robjects_ExpandAll_button"
+								label="Expand All"
+								buttonstyle="pictures"
+								class="robjects-expand-all-icon"
+								oncommand="sv.robjects.foldAll(false);"
+								tooltiptext="&sciviews.robjects.unfoldAll;"/>
+						</hbox>
+					</vbox>
+				</vbox>
+			</tabpanel>
+		</tabpanels>
+	</tabbox>
+</overlay>

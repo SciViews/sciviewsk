@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+	<!-- ***** BEGIN LICENSE BLOCK *****
+	Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+	The contents of this file are subject to the Mozilla Public License
+	Version 1.1 (the "License"); you may not use this file except in
+	compliance with the License. You may obtain a copy of the License at
+	http://www.mozilla.org/MPL/
+
+	Software distributed under the License is distributed on an "AS IS"
+	basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+	License for the specific language governing rights and limitations
+	under the License.
+
+	The Original Code is SciViews-K by Philippe Grosjean et al.
+
+	Contributor(s):
+	Philippe Grosjean
+	Kamil Barton
+	ActiveState Software Inc (code inspired from)
+
+	Alternatively, the contents of this file may be used under the terms of
+	either the GNU General Public License Version 2 or later (the "GPL"), or
+	the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+	in which case the provisions of the GPL or the LGPL are applicable instead
+	of those above. If you wish to allow use of your version of this file only
+	under the terms of either the GPL or the LGPL, and not to allow others to
+	use your version of this file under the terms of the MPL, indicate your
+	decision by deleting the provisions above and replace them with the notice
+	and other provisions required by the GPL or the LGPL. If you do not delete
+	the provisions above, a recipient may use your version of this file under
+	the terms of any one of the MPL, the GPL or the LGPL.
+
+	***** END LICENSE BLOCK ***** -->
+
+<!-- SciViews-K preference page to configure R interpreter -->
+
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/listbox.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/tree.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/prefs/prefs.css" type="text/css"?>
+
+<window xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	class="kodialog" orient="vertical" onload="PrefR_OnLoad();">
+
+	<script src="chrome://komodo/content/library/trace.js" type="application/x-javascript"/>
+	<script src="chrome://komodo/content/library/logging.js" type="application/x-javascript"/>
+	<script src="chrome://komodo/content/library/dialogs.js" type="application/x-javascript"/>
+	<script src="chrome://komodo/content/library/uriparse.js" type="application/x-javascript"/>
+	<script src="chrome://komodo/content/library/filepickers.js" type="application/x-javascript"/>
+	<script src="chrome://komodo/content/library/windowManager.js" type="application/x-javascript"/>
+	<script src="chrome://sciviewsk/content/js/pref-R.js" type="application/x-javascript"/>
+	
+	<box class="kobox-smallheader" title="R interpreter configuration"/>
+	
+	<vbox id="r-prefs-vbox" flex="1" class="autoscroll">	
+		<groupbox orient="vertical">
+			<caption label="Default R Interpreter"/>
+			
+			<vbox id="no-avail-interps-message" flex="1" align="center">
+				<description style="font-weight: bold;">
+					No R installation was found on your system. If you would like
+					to run R programs in Komodo you will need to install it. You can
+					get R from the CRAN website at
+				</description>
+				<button label="http://cran.r-project.org/"
+					class="button-link-a" style="cursor: pointer;"
+					oncommand="parent.opener.ko.browse.openUrlInDefaultBrowser('http://cran.r-project.org/');"/>
+				<separator />
+			</vbox>
+			
+			<hbox align="center">
+				<label class="label" control="sciviews.r.batchinterp" value="Preferred way to run R:"/>
+					<menulist
+						id="sciviews.r.batchinterp" oncommand="PrefR_svRApplicationOnSelect(event);"
+						pref="true" />
+			</hbox>
+			
+			<label value="Use this application:" control="sciviews.r.interpreter" />
+			
+			<hbox>
+				<vbox flex="2">
+					<menulist id="sciviews.r.interpreter" sizetopopup="none" width="200"
+						editable="false" flex="1" pref="true"
+						oncommand="PrefR_svRDefaultInterpreterOnSelect(event);" />
+	
+					<hbox align="center">
+						<label value="Command line arguments:"
+							control="sciviews.r.args" pref="false" />
+						<textbox id="sciviews.r.args" pref="true" editable="true" flex="1"
+							oninput="PrefR_updateCommandLine(event);" />
+						<toolbarbutton
+							oncommand="sv.r.help(&quot;Startup&quot;)"
+							buttonstyle="pictures" class="help-icon"
+							tooltiptext="Show R Help about the command line" />
+					</hbox>
+				</vbox>
+				
+				<vbox>
+					<button label="Browse..." oncommand="PrefR_setExecutable();"/>
+				</vbox>
+			</hbox>
+			
+			<separator class="thin"/>
+			
+			<vbox>
+				<label class="label" control="R_command" crop="end"
+					value="This command will be used to start R (R -> Start R):"/>
+				<textbox id="R_command" value="" class="plain"
+					style="background: none; padding-top: 1px !important; margin-left: 10px !important; color: rgb(184, 38, 25);" />
+			</vbox>
+		</groupbox>
+		
+		<groupbox orient="vertical">
+			<caption label="Data input and output"/>
+			
+			<grid>
+				<columns>
+					<column flex="3"/>
+					<column flex="3"/>
+					<column flex="3"/>
+				</columns>
+				
+				<rows>
+					<row align="center">
+						<label value="Decimal separator" control="r.csv.dec"/>
+						<menulist pref="true" id="r.csv.dec"
+							items=", ." persist="items" maxValues="3">
+							<menupopup />
+						</menulist>
+						<label value="CSV field separator" control="r.csv.sep" />
+						<menulist pref="true" id="r.csv.sep" editable="true"
+							onkeyup="if (event.keyCode == 13) PrefR_editMenulist(this);"
+							onblur="PrefR_editMenulist(this);"
+							items=", ; \t" persist="items" maxValues="5">
+							<menupopup />
+						</menulist>
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+	
+		<groupbox orient="vertical">
+			<caption label="R configuration"/>
+			
+			<vbox>
+				<hbox align="center">
+					<label value="Default CRAN mirror:" control="r.cran.mirror" />
+					<menulist id="r.cran.mirror" sizetopopup="none" width="200"
+						pref="true"> <!-- prefattribute="value"> -->
+						<menupopup maxheight="200" />
+					</menulist>
+					<button label="Refresh list" oncommand="PrefR_UpdateCranMirrors(false);" />
+				</hbox>
+			</vbox>
+		</groupbox>
+	
+		<groupbox orient="vertical">
+			<caption label="Miscellaneous"/>
+			<label value="Startup packages"/>
+	
+			<vbox>
+				<description>
+					&quot;SciViews-K&quot; needs packages &quot;svKomodo&quot;, &quot;svHttp&quot;,
+					&quot;svSocket&quot; and &quot;svMisc&quot; to be loaded in order for
+					communication with Komodo to be possible. The required packages are
+					installed/updated automatically when R is started from within Komodo.
+				</description>
+	
+				<hbox>
+					<checkbox id="sciviews.pkgs.sciviews" checked="yes"
+						label="Load also package &quot;SciViews&quot; at R startup"
+						control="sciviews.pkgs.sciviews" pref="true"
+						oncommand="PrefR_updateCommandLine(true);"/>
+				</hbox>
+			</vbox>
+		
+			<separator class="thin"/>
+	
+			<hbox align="center" hidden="true">
+				<label value="Show R help in:" />
+				<radiogroup id="r.help.open.in" disabled="true"
+					pref="false" orient="horizontal">
+					<radio value="window" label="new window" accesskey="E"
+						selected="true" />
+					<radio value="pane" label="right pane" accesskey="P" />
+				</radiogroup>
+			</hbox>
+			
+			<separator class="thin"/>
+			
+			<hbox align="center"  hidden="true">
+				<checkbox id="sciviews.r.auto-start" disabled="true"
+					label="Start R automatically" pref="false" />
+			</hbox>
+		</groupbox>
+	
+		<hbox>
+			<button label="Show advanced settings (rarely need to be changed)"
+				oncommand="document.getElementById('pref-R-advanced').hidden=false; this.hidden=true;" hidden="false" />
+		</hbox>
+	
+		<groupbox id="pref-R-advanced" orient="vertical" hidden="true">
+			<caption label="Connection to R"/>
+			
+			<hbox align="center">
+				<label value="Server type:" control="sciviews.r.type"/>
+				<menulist pref="true" id="sciviews.r.type"
+					items="http socket" persist="items">
+					<menupopup />
+				</menulist>				
+			</hbox>
+			
+			<grid>
+				<columns>
+					<column flex="1"/>
+					<column flex="2"/>
+					<column flex="1"/>
+					<column flex="2"/>
+				</columns>
+				
+				<rows>
+					<row align="center">
+						<label value="Server port #:" control="sciviews.r.port" />
+						<textbox id="sciviews.r.port" pref="true" width="50" />
+						<label value="Host to connect to:" control="sciviews.r.host" />
+						<textbox id="sciviews.r.host" pref="true" width="150"
+							tooltip="Currently only local connection is allowed"
+							disabled="false"/>
+					</row>
+					<row align="center">
+						<label value="Page server port #:" control="sciviews.r.page.port" />
+						<textbox id="sciviews.r.page.port" pref="true" width="50" />
+						<label value=" " />
+						<label value=" " />
+					</row>
+				</rows>
+			</grid>
+			
+			<hbox align="center">
+				<label value="Client type:" control="sciviews.ko.type"/>
+				<menulist pref="true" id="sciviews.ko.type"
+					items="file socket" persist="items">
+					<menupopup />
+				</menulist>
+			</hbox>		
+			
+			<grid>
+				<columns>
+					<column flex="1"/>
+					<column flex="2"/>
+					<column flex="1"/>
+					<column flex="2"/>
+				</columns>
+				
+				<rows>		
+					<row align="center">
+						<label value="Client port #:" control="sciviews.ko.port" />
+						<textbox id="sciviews.ko.port" pref="true" width="50" />
+						<label value="Client Id:" control="sciviews.ko.id" />
+						<textbox id="sciviews.ko.id" pref="true" width="150" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+
+		<groupbox orient="vertical" align="center">
+			<caption label="About"/>
+			<separator class="thin"/>
+			<description>
+				SciViews-K allows to use Komodo-Edit as a GUI and editor for R.
+			</description>
+			<button label="Visit the SciViews web site" class="button-link"
+				style="margin-top: -10px; color: rgb(184, 38, 25);"
+				onclick="parent.opener.ko.browse.openUrlInDefaultBrowser('http://www.sciviews.org/SciViews-K');"/>
+			<separator class="thin"/>
+		</groupbox>
+	</vbox>
+</window>

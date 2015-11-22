@@ -1,0 +1,95 @@
+
+.toolbox-top {
+    border: none;
+    margin: 0px;
+    margin-bottom: 1px;
+    padding: 0px;
+}
+
+/* fixup the hight of toolbar menu buttons */
+hbox > toolbar > toolbarbutton[type="menu-button"] {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+/* TODO: I believe this production is cruft. */
+toolbar {
+    border-right: 1px outset ThreeDHighlight;
+    border-left: 1px outset ThreeDHighlight;
+}
+
+toolbarbutton {
+    /*-moz-box-orient: vertical;*/
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.toolbarbutton-text[buttonstyle="pictures"],
+.toolbarbutton-icon[buttonstyle="text"] {
+    display: none;
+}
+
+/*/* Bug 45096: These are evil. It is the reason why, for example, rxx.xul puts*/
+/* * bogus spaces around toolbarbutton labels to get some spacing. This should be*/
+/* * removed once the impact on other bits is understood. */
+/*.toolbarbutton-text {*/
+/*    margin: 0px;*/
+/*    padding: 0px;*/
+/*}
+/*.toolbarbutton-icon {*/
+/*    -moz-margin-end: 0px;*/
+/*}
+/*.toolbar-box {*/
+/*    padding: 2px 4px;*/
+/*}*/
+
+
+toolbarbutton.toolbar-portrait-page .toolbarbutton-text,
+toolbarbutton.toolbar-landscape-page .toolbarbutton-text {
+    display: none;
+}
+
+.history-back-icon {
+  list-style-image: url("chrome://komodo/skin/images/browser_buttons.png");
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+
+/* rect(top,right,bottom,left) */
+.history-back-icon:not([disabled="true"]):hover {
+  -moz-image-region: rect(0px 16px 16px 0px);
+}
+.history-back-icon[disabled="true"] {
+  -moz-image-region: rect(32px 16px 48px 0px) !important;
+}
+.history-back-icon:not([disabled="true"]):hover,
+.history-back-icon:not([disabled="true"]):hover:active {
+  -moz-image-region: rect(16px 16px 32px 0px);
+}
+
+.history-forward-icon {
+  list-style-image: url("chrome://komodo/skin/images/browser_buttons.png");
+  -moz-image-region: rect(0px 32px 16px 16px);
+}
+
+.history-forward-icon:not([disabled="true"]):hover,
+.history-forward-icon:not([disabled="true"]):hover:active {
+  -moz-image-region: rect(16px 32px 32px 16px);
+}
+
+.history-forward-icon[disabled="true"] {
+  -moz-image-region: rect(32px 32px 48px 16px) !important;
+}
+
+.print-icon {
+  list-style-image : url("chrome://komodo/skin/images/print_button.png");
+}
+
+.print-icon[disabled="true"],
+.print-icon[disabled="true"]:hover,
+.print-icon[disabled="true"]:hover:active {
+  list-style-image : url("chrome://komodo/skin/images/print_button_disabled.png");
+}
+
+.print-icon:hover {
+  list-style-image : url("chrome://komodo/skin/images/print_button_hover.png");
+}

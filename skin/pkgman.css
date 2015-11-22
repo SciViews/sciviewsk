@@ -1,0 +1,204 @@
+#viewGroup radio {
+  /*-moz-binding: url("file:///E:/Dokumenty/R-Forge/sciviews/komodo/SciViews-K-dev/content/pkgman/pkgman.xbl#viewbutton");*/
+  -moz-binding: url("chrome://sciviewsk/content/pkgman/pkgman.xbl#viewbutton");
+  -moz-box-orient: vertical;
+  -moz-box-align: center;
+  -moz-appearance: none;
+  margin: 0px 1px 0px 1px;
+  padding: 5px 3px 1px;
+  min-width: 4.5em;
+  list-style-image: url("chrome://sciviewsk/skin/images/viewButtons.png");
+}
+
+#viewGroup radio:hover {
+  background-color: #E0E8F6;
+  color: black;
+}
+
+#viewGroup radio[selected="true"] {
+  background-color: #C1D2EE;
+  color: black;
+}
+
+radio#extensions-view {
+  -moz-image-region: rect(0px, 32px,  32px, 0px)
+}
+radio#extensions-view:hover, radio#extensions-view[selected="true"]  {
+  -moz-image-region: rect(32px, 32px,  64px, 0px)
+}
+
+radio#updates-view {
+  -moz-image-region: rect(0px, 160px, 32px, 128px)
+}
+radio#updates-view:hover, radio#updates-view[selected="true"] {
+  -moz-image-region: rect(32px, 160px, 64px, 128px)
+}
+
+radio#installs-view {
+  -moz-image-region: rect(0px, 192px, 32px, 160px)
+}
+radio#installs-view:hover, radio#installs-view[selected="true"] {
+  -moz-image-region: rect(32px, 192px, 64px, 160px)
+}
+
+radio#search-view {
+  -moz-image-region: rect(0px, 224px, 32px, 192px)
+}
+radio#search-view:hover, radio#search-view[selected="true"] {
+  -moz-image-region: rect(32px, 224px, 64px, 192px)
+}
+
+radio#mirrors-view {
+  -moz-image-region: rect(0px, 96px, 32px, 64px)
+}
+radio#mirrors-view:hover, radio#mirrors-view[selected="true"] {
+  -moz-image-region: rect(32px, 96px, 64px, 64px)
+}
+
+radio#updates-view[disabled="true"] image {
+  opacity: 0.2;
+}
+
+#pkgPanels richlistbox[empty] {
+	visibility: hidden;
+}
+
+.rPackageList richlistitem {
+  -moz-binding: url("chrome://sciviewsk/content/pkgman/pkgman.xbl#pkg-item");
+  padding-top: 6px;
+  padding-bottom: 6px;
+  -moz-padding-start: 7px;
+  -moz-padding-end: 7px;
+  border-bottom: 1px dotted #C0C0C0;
+}
+
+.rPackageList richlistitem.navButton {
+  -moz-binding: url("chrome://sciviewsk/content/pkgman/pkgman.xbl#pkg-nav-button");
+}
+
+richlistitem[installed] button[anonid="installPkgButton"],
+richlistitem:not([old]) button[anonid="upgradePkgButton"],
+richlistitem:not([installed]) button[anonid="removePkgButton"],
+richlistitem:not([loaded]) button[anonid="detachPkgButton"],
+richlistitem:not([installed]) button[anonid="loadPkgButton"],
+richlistitem[loaded] button[anonid="loadPkgButton"] {
+  visibility: collapse;
+}
+
+richlistitem description.title {
+  font-weight: bold;
+}
+
+richlistitem[update=true] {
+  background-color: #e1ffc4;
+}
+
+richlistitem[selected="true"] {
+  color: HighlightText;
+  background-attachment: scroll;
+  background-color: Highlight;
+  background-image: url("chrome://sciviewsk/skin/images/itemEnabledFader.png");
+  background-position: 0% 0%;
+  background-repeat: repeat;
+}
+
+richlistitem.navButton {
+  color: ButtonText;
+  background-color: ThreeDFace;
+}
+
+
+richlistitem.navButton[selected="true"] {
+  color: HighlightText;
+  background-attachment: scroll;
+  background-color: Highlight;
+  background-image: none;
+}
+
+richlistitem description.description {
+}
+
+
+richlistitem label.title {
+  font-weight: bold;
+}
+
+richlistitem description.description-full {
+  white-space: pre-wrap;
+  overflow: auto;
+}
+
+richlistitem .DescriptionText {
+}
+
+richlistitem .DescriptionField {
+  font-weight: bold;
+}
+
+richlistitem .text-link {
+  color: white;
+}
+
+richlistitem:not([selected="true"]) .description-full {
+  visibility: collapse;
+}
+
+richlistitem[selected="true"] description.description {
+  visibility: collapse;
+}
+
+richlistitem:not([selected="true"]) hbox.buttons {
+  visibility: collapse;
+}
+
+/*richlistitem:not([selected="true"])[status="0"] {
+  background-color: #fbed9f;
+}
+
+richlistitem:not([selected="true"])[status="1"] {
+  background-color: #fecfcf;
+}*/
+
+#rPackageList >
+richlistitem:not([selected]):not([loaded]) {
+  opacity: 0.3;
+  /*
+  background-color: red;
+  background-color: #8981f5;
+  */
+}
+
+#rAvailablePackageList >
+richlistitem[installed]:not([selected]) {
+  background-color: rgba(64,0,128,0.2);
+  /*opacity: 0.3;*/
+}
+
+#rAvailablePackageList >
+richlistitem[installed][selected] {
+  background-color: rgba(32,0,128,0.4);
+  /*opacity: 0.3;*/
+}
+
+richlistitem:not([selected])[old] {
+  background-color: #d3ffa8;
+}
+
+tab:first-child {
+  -moz-border-radius: 6px 6px 0px 0px;
+}
+
+tab:last-child {
+  -moz-border-radius: 0px 6px 0px 0px;
+}
+
+tab {
+  -moz-image-region: rect(10px, 15px, 5px, 0px);
+  color: GrayText;
+  min-height: 45px;
+}
+
+tab[selected="true"] {
+  color: ButtonText;
+  font-weight: bold;
+}

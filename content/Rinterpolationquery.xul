@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ 
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+ 
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+ 
+ The Original Code is Komodo code.
+ Modified and adapted for SciViews-K by Ph. Grosjean.
+ 
+ The Initial Developer of the Original Code is ActiveState Software Inc.
+ Portions created by ActiveState Software Inc are Copyright (C) 2000-2007
+ ActiveState Software Inc. All Rights Reserved.
+ 
+ Contributor(s):
+   ActiveState Software Inc
+   Ph. Grosjean
+ 
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+ 
+ ***** END LICENSE BLOCK ***** -->
+
+<!-- String interpolation query dialog.
+
+  This dialog expects an object as the first window argument with the
+  following properties:
+    "queries" is an array of KoIInterpolationQuery's objects.
+    "title" is an appropriate title for the query dialog (a value of
+        null will trigger the default title).
+
+  On exit:
+    "queries" elements will be modified in-place with the user's answers.
+    "retval" will be set to "ok" or "cancel".
+  -->
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/autocomplete.css" type="text/css"?>
+
+<dialog id="dialog-interpolationquery"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  onload="OnLoad()"
+  orient="vertical"
+  style="min-width: 40em; max-width: 55em;"
+  flex="1"
+  buttons="help,accept,cancel"
+  ondialogaccept="return OK();"
+  ondialogcancel="return Cancel();"
+  ondialoghelp="alert('Sorry, not help currently available!');">
+
+  <script src="chrome://xtk/content/xtk.js" type="application/x-javascript;version=1.7"/>
+  <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/logging.js"/>
+  <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/trace.js"/>
+  <script type="application/x-javascript;version=1.7" src="chrome://komodo/content/library/mru.js"/>
+  <script type="application/x-javascript;version=1.7" src="chrome://sciviewsk/content/js/rinterpolationquery.js"/>
+
+  <popupset>
+    <panel type="autocomplete" id="popupTextboxAutoComplete" noautofocus="true"/>
+  </popupset>
+
+  <vbox>
+    <!--PhG: how can I get a description area with multiple lines that nicely
+    fit in width in the dialog box? I can only do a single line, or use a
+    disabled textbox, but that does not fill well too!!!-->
+    <!--<textbox id="query-desc"
+      disabled="true" multiline="true" hidden="true" style="background-color:gray">
+		</textbox>-->
+    <description id="query-desc" crop="end">
+    </description>
+	  
+		<separator class="thin"/>
+    
+		<grid>
+      <columns>
+        <!--<column style="min-width: 100px;" flex="1"/>-->
+        <!--<column style="min-width: 200px;" flex="1"/>-->
+        <column />
+        <column flex="1"/>
+      </columns>
+      <rows id="query-rows">
+      </rows>
+    </grid>
+  </vbox>
+  
+	<separator class="thin"/>
+</dialog>

@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+
+ The Original Code is SciViews-K by Philippe Grosjean et al.
+
+ Contributor(s):
+   Philippe Grosjean
+   ActiveState Software Inc (code inspired from)
+
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+
+ ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN"
+"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/toolbarbutton.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://sciviewsk/skin/sciviewsk.css" type="text/css"?>
+<?xml-stylesheet href="chrome://sciviewsk/skin/rhelpwin.css" type="text/css"?>
+
+<dialog id="dialog-interpolationhelp"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  onload="OnLoad()"
+  orient="vertical"
+  width="700" height="500" screenX="20" screenY="20"
+  persist="screenX screenY width height"
+	style="min-height: 400px; min-width: 300px;"
+  flex="1"
+  buttons="cancel,accept"
+  ondialogcancel="return true;"
+	ondialogaccept="Go(); return false;">
+
+	<script type="text/javascript">
+	<![CDATA[
+		var rHelpBrowser;
+		var rHelpTopic;
+		var rHomepage;
+		const nsIWebNavigation = Components.interfaces.nsIWebNavigation;
+		
+		function OnLoad () {
+			rHelpBrowser = document.getElementById("rsnippethelp-browser");
+			rHelpBrowser.addProgressListener(progressListener,
+				Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+			rHelpTopic = document.getElementById("rsnippethelp-topic");
+			
+			var dialog = document.getElementById("dialog-interpolationhelp")
+			var cancelButton = dialog.getButton("cancel");
+			cancelButton.setAttribute("value", "Close");
+			cancelButton.setAttribute("accesskey", "c");
+			var okButton = dialog.getButton("accept");
+			okButton.setAttribute("hidden", "true");
+		
+			// Process input arguments.
+			if (typeof window.arguments[0].title != "undefined" &&
+				window.arguments[0].title != null) {
+				document.title = window.arguments[0].title;
+			} else {
+				document.title = "Interpolation Help";
+			}
+			
+			// Set home page to the page provided on startup
+			if (typeof(window.arguments[0].uri) != "undefined" &&
+				window.arguments[0].uri != null) {
+				rHomepage = window.arguments[0].uri;
+			} else {
+				rHomepage = "bout:blank";
+			}
+			rHelpTopic.value = rHomepage;
+			rHelpBrowser.webNavigation.loadURI(rHomepage, 
+				nsIWebNavigation.LOAD_FLAGS_NONE, null, null, null);
+		}
+		
+		function Go () {
+			rHelpBrowser.webNavigation.loadURI(rHelpTopic.value, 
+				nsIWebNavigation.LOAD_FLAGS_NONE, null, null, null);
+		}
+		
+		function Home () {
+			rHelpBrowser.webNavigation.loadURI(rHomepage, 
+				nsIWebNavigation.LOAD_FLAGS_NONE, null, null, null);
+		}
+		
+		// Browser progress listener: so far used only to change location text
+		// From: https://developer.mozilla.org/en/Code_snippets/Progress_Listeners
+		var progressListener = {
+			QueryInterface: function (aIID) {
+				if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+					aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+					aIID.equals(Components.interfaces.nsISupports))
+					return(this);
+					throw(Components.results.NS_NOINTERFACE);
+			},
+		
+			onStateChange: function (aWebProgress, aRequest, aFlag, aStatus) {
+				// If you use myListener for more than one tab/window, use
+				// aWebProgress.DOMWindow to obtain the tab/window which
+				// triggers the state change
+		
+				if (aFlag & Components.interfaces.nsIWebProgressListener.STATE_START) {
+					// This fires when the load event is initiated
+					document.getElementById("cmd_stop")
+						.setAttribute("disabled", false);
+		
+					document.getElementById("cmd_stop").hidden = false;
+					document.getElementById("cmd_reload").hidden = true;
+				}
+		
+				if (aFlag & Components.interfaces.nsIWebProgressListener.STATE_STOP) {
+					// This fires when the load finishes
+					rHelpTopic.value = aWebProgress.DOMWindow.document.location;
+		
+					document.getElementById("cmd_stop")
+						.setAttribute("disabled", true);
+		
+					document.getElementById("cmd_stop").hidden = true;
+					document.getElementById("cmd_reload").hidden = false;
+		
+					document.getElementById("cmd_go_back")
+						.setAttribute("disabled", !rHelpBrowser.webNavigation.canGoBack)
+					document.getElementById("cmd_go_forward")
+						.setAttribute("disabled", !rHelpBrowser.webNavigation.canGoForward);
+				}
+			},
+		
+			onLocationChange: function (aProgress, aRequest, aURI) {
+				// This fires when the location bar changes; i.e load event is
+				// confirmed or when the user switches tabs. If you use
+				// myListener for more than one tab/window, use
+				// aProgress.DOMWindow to obtain the tab/window which triggered
+				//the change.
+			},
+		
+			// For definitions of the remaining functions see XULPlanet.com
+			onProgressChange: function (aWebProgress, aRequest, curSelf,
+				maxSelf, curTot, maxTot) { },
+			
+			onStatusChange: function (aWebProgress, aRequest, aStatus,
+				aMessage) { },
+			
+			onSecurityChange: function (aWebProgress, aRequest, aState) { }
+		}
+	]]>
+	</script>
+
+	<keyset id="keyset_main">
+		<key id="key_go_back" keycode="VK_BACK" command="cmd_go_back" modifiers="" />
+		<key id="key_go_home" keycode="VK_HOME" command="cmd_go_home" modifiers="alt" />
+	</keyset>
+
+	<commandset id="commandset_main">
+		<command id="cmd_go" oncommand="Go();" disabled="false"
+			label="Go" tooltiptext="Go" />
+		<command id="cmd_go_back" oncommand="rHelpBrowser.goBack();" disabled="false"
+		  label="Back" tooltiptext="Back" />
+		<command id="cmd_go_forward" oncommand="rHelpBrowser.goForward();" disabled="false"
+		  label="Forward" tooltiptext="Forward" />
+		<command id="cmd_go_home" oncommand="Home();"
+		  label="Home" tooltiptext="Home" />
+		<command id="cmd_stop" oncommand="rHelpBrowser.stop(rHelpBrowser.webNavigation.STOP_ALL);"
+		  label="Stop" tooltiptext="Stop" />
+		<command id="cmd_reload" oncommand="rHelpBrowser.reload();"
+		  label="Reload page" tooltiptext="Reload page" />
+	</commandset>
+
+	<toolbox id="rsnippethelp-toolbox" class="toolbox-top" mode="icons"
+		defaultmode="icons" iconsize="small">
+		<toolbar type="toolbar" id="nav-toolbar" class="toolbar"
+			mode="icons" iconsize="small"
+			defaulticonsize="small">
+			<toolbarbutton id="rsnippethelp-back-button" class="history-back-icon"
+		    command="cmd_go_back" buttonstyle="pictures"/>
+			<toolbarbutton id="rsnippethelp-forward-button" class="history-forward-icon"
+		    command="cmd_go_forward" buttonstyle="pictures"/>
+			<toolbarbutton id="rsnippethelp-home" class="home-icon"
+		    command="cmd_go_home" buttonstyle="pictures"/>
+			<toolbarbutton id="rsnippethelp-stop-button" class="stop-icon"
+		    command="cmd_stop" buttonstyle="pictures"/>
+			<toolbarbutton id="rsnippethelp-reload-button" class="reload-icon"
+		    command="cmd_reload" buttonstyle="pictures"/>
+      <vbox align="stretch" flex="1">
+        <textbox id="rsnippethelp-topic" flex="0"
+					emptytext="web page" tooltiptext="Web page"/>
+      </vbox>
+			<toolbarbutton id="rhelp-go" class="go-icon"
+				command="cmd_go" buttonstyle="pictures"/>
+			<spacer flex="1"/>
+		</toolbar>
+	</toolbox>
+
+	<vbox flex="1">
+    <hbox flex="1">
+      <browser id="rsnippethelp-browser" type="content-primary"
+        src="about:blank" flex="1"/>
+    </hbox>
+	</vbox>
+</dialog>

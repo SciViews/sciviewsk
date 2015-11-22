@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+
+ The Original Code is SciViews-K by Kamil Barton
+
+ Contributor(s):
+   Kamil Barton
+
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+
+ ***** END LICENSE BLOCK ***** -->
+<!DOCTYPE bindings [
+  <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd" >
+  %brandDTD;
+]>
+
+<bindings id="kbBlaStuff"
+  xmlns="http://www.mozilla.org/xbl"
+  xmlns:xbl="http://www.mozilla.org/xbl"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<binding id="pkg-item"
+		extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <resources>
+			<stylesheet src="chrome://global/skin/"/>
+    </resources>
+
+		<content minheight="30">
+			<xul:vbox style="border: 0 blue solid;" flex="1">
+				<xul:hbox class="addon-name-version">
+					<xul:label anonid="title" class="title addonName"
+						xbl:inherits="value=label"/>
+					<xul:label anonid="version" class="version addonVersion"
+						xbl:inherits="value=version" align="right"/>
+					<xul:label anonid="installedVersion"
+						xbl:inherits="value=installedVersion"/>
+				</xul:hbox>
+			
+				<xul:description class="description" crop="end" xbl:inherits="value=desc"/>
+	
+				<xul:vbox class="description-full"
+					style="margin-bottom: 3px; border: 0px red solid; overflow-y: auto;"
+					maxheight="120"
+					onoverflow="this.height=Math.min(this.maxHeight, this.firstChild.getBoundingClientRect().height + 3)">
+	
+					<xul:vbox>
+						<xul:hbox pack="start">
+							<xul:label class="addonLearnMore text-link"
+								value="Show full description"
+								anonid="getDescriptionPkgButton"
+								onclick="getDescriptionFor(document.getBindingParent(this))"/>
+						</xul:hbox>
+				
+						<xul:description anonid="fullDescription" class="description-full"
+							xbl:inherits="xbl:text=desc"/>
+					</xul:vbox>
+				</xul:vbox>
+			
+				<xul:hbox align="right" class="buttons" style="border: 0px blue solid;">
+					<xul:spacer/>
+					<xul:button anonid="installPkgButton" label="Install package"
+						mode=""
+						oncommand="pkgManInstall(this.getAttribute('pkg'), true)"
+						xbl:inherits="pkg=label"/>
+					<xul:button anonid="upgradePkgButton" label="Upgrade package"
+						mode="installed old required"
+						oncommand="pkgManUpgrade(this.getAttribute('pkg'))"
+						xbl:inherits="pkg=label"/>
+					<xul:button anonid="removePkgButton" label="Uninstall package"
+						mode="installed"
+						oncommand="pkgManRemove(this.getAttribute('pkg'))"
+						xbl:inherits="pkg=label" />
+					<xul:button anonid="loadPkgButton" label="Load package"
+						mode="installed/"
+						oncommand="pkgManLoad(this.getAttribute('pkg'))"
+						xbl:inherits="pkg=label" />
+					<xul:button anonid="detachPkgButton" label="Detach package"
+						mode="installed loaded"
+						oncommand="pkgManDetach(this.getAttribute('pkg'))"
+						xbl:inherits="pkg=label" />
+				</xul:hbox>
+			</xul:vbox>
+		</content>
+		
+		<implementation>
+	    <constructor>
+				<![CDATA[
+					var _this = this;
+					//var button = document.getAnonymousElementByAttribute(this,
+					//	"anonid", "loadPkgButton");
+					//button.addEventListener("command", function(event) {
+					//	alert(_this._title.value)}, false);
+					var version = document.getAnonymousElementByAttribute(this,
+						"anonid", "version");
+					version.value = version.value? "(" + version.value + ")" : "";
+				]]>
+			</constructor>
+		
+			<field name="_title">
+				document.getAnonymousElementByAttribute(this, "anonid", "title");
+			</field>
+		
+			<property name="label" onget="return this._title.value;">
+				<setter>
+				  <![CDATA[
+					  this._title.setAttribute("value", val);
+					  //this._title.value = val;
+					  return(val);
+				  ]]>
+				</setter>
+			</property>
+		
+			<property name="desc">
+				<setter>
+				  <![CDATA[
+						//sv.cmdout.append(val);
+						//this.setAttribute("desc", val);
+						var fullDescription = document
+							.getAnonymousElementByAttribute(this, "anonid",
+							"fullDescription");
+						if (!fullDescription) return("");
+	
+						var grid = this.buildDescription(val);
+						fullDescription.parentNode.replaceChild(grid, fullDescription);
+						var getDescriptionPkgButton = document
+							.getAnonymousElementByAttribute(this, "anonid",
+							"getDescriptionPkgButton");
+						getDescriptionPkgButton.hidden = true;
+						return val;
+				  ]]>
+				</setter>
+			</property>
+
+      <method name="buildDescription">
+        <parameter name="text"/>
+        <body>
+					<![CDATA[
+						const XUL_NS =
+							"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+						const skipFields = ['Package', 'Version', 'Type', 'LazyLoad',
+								'LazyData', 'Encoding', 'Built', 'Packaged', 'Collate'];
+
+						//alert(text);
+						var lines = text.split(/[\r\n]+/);
+						var grid = document.createElementNS(XUL_NS, 'grid');
+						grid.className = "description-full";
+
+						var cols = grid.appendChild(document.createElementNS(XUL_NS,
+							'columns'));
+						for (var i = 0; i < 2; i++) {
+							var c = cols.appendChild(document.createElementNS(XUL_NS,
+								'column'));
+							c.setAttribute("flex", i);
+						}
+						var rows = grid.appendChild(document.createElementNS(XUL_NS,
+							'rows'));
+						for (var i in lines) {
+							var strs = lines[i].match(/^(\w+): (.*)$/);
+							if (strs == null || skipFields.indexOf(strs[1]) != -1) continue;
+							var fieldName = strs[1];
+							var fieldVal = strs[2];
+							if (fieldName == 'Depends')
+								fieldVal = fieldVal.replace(/\s*,?R\s*\([^\)]+\),?\s*/, '');
+							if (!fieldVal) continue;
+
+							var row = rows.appendChild(document.createElementNS(XUL_NS,
+								'row'));
+							var label = row.appendChild(document.createElementNS(XUL_NS,
+								'label'));
+							label.setAttribute("value", fieldName);
+							desc = row.appendChild(document.createElementNS(XUL_NS,
+								'description'));
+							desc.textContent = fieldVal;
+							label.className = "DescriptionField";
+							desc.className = "DescriptionText";
+						}
+						return(grid);
+					]]>
+				</body>
+			</method>
+		</implementation>
+	
+		<handlers>
+			<handler event="mouseup" action="this.checked=!this.checked"/>
+		</handlers>
+	</binding>
+
+	<binding id="pkg-nav-button"
+		extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <resources>
+			<stylesheet src="chrome://global/skin/"/>
+    </resources>
+
+		<content minheight="30">
+			<xul:vbox flex="1">
+				<xul:hbox flex="1">
+					<xul:label anonid="next" class="navigButton text-link" value=""
+						xbl:inherits="onclick=oncommand"/>
+				</xul:hbox>
+			</xul:vbox>
+		</content>
+
+		<implementation>
+	    <constructor>
+				<![CDATA[
+					var button = document.getAnonymousElementByAttribute(this,
+						"anonid", "next");
+					var listItem = document.getBindingParent(button);
+					var listBox = listItem.parentNode;
+					var idx = listBox.getIndexOfItem(listItem);
+					var isLast = idx == listBox.itemCount - 1;
+					var isFirst = idx == 0;
+					button.value = isFirst ? "Previous page" : isLast? "Next page"
+						: "WTF?";
+					//button.addEventListener("click", function(event) {
+					//	alert(idx  )}, false);
+				]]>
+			</constructor>
+		</implementation>
+	</binding>
+
+	<!-- based on preferences.xml paneButton -->
+	<binding id="viewbutton"
+		extends="chrome://global/content/bindings/radio.xml#radio">
+    <resources>
+      <stylesheet src="chrome://sciviewsk/skin/pkgman.css"/>
+    </resources>
+  
+	  <content>
+      <xul:image class="viewButtonIcon" xbl:inherits="src"/>
+      <xul:label class="viewButtonLabel" xbl:inherits="value=label"/>
+    </content>
+  
+	  <implementation implements="nsIAccessibleProvider">
+      <property name="accessibleType" readonly="true">
+        <getter>
+          <![CDATA[
+            return(Components.interfaces.nsIAccessibleProvider.XULListitem);
+          ]]>
+        </getter>
+      </property>
+    </implementation>
+  </binding>
+</bindings>

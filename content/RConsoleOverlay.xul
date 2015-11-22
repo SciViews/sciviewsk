@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+
+ The Original Code is SciViews-K by Philippe Grosjean et al.
+
+ Contributor(s):
+   Activestate staff (original code is Komodo's runOutput window)
+	 Philippe Grosjean, SciViews
+
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+
+ ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN" "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" [
+  <!ENTITY % debuggerDTD SYSTEM "chrome://komodo/locale/komodo.dtd">
+  %debuggerDTD;
+]>
+
+<?xml-stylesheet href="chrome://global/content/xul.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/komodo.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/toolbar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/scrolltabs.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/sidebar.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/views.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/bindings/widgets.css" type="text/css"?>
+<?xml-stylesheet href="chrome://komodo/skin/platform.css" type="text/css"?>
+
+<?xul-overlay href="chrome://komodo/content/bindings/scintilla-overlay.xul"?>
+
+<overlay id="sciviewskRconsoleOverlay"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://sciviewsk/content/js/rconsole.js"/>
+
+	<menupopup id="tabPicker_popup">
+		<menuitem id="show_rconsole_tab" label="R Output"
+			insertbefore="show_runoutput_tab"
+			observes="show_sciviews_rconsole_tab"
+			oncommand="ko.uilayout.ensureTabShown('sciviews_rconsole_tab', true);"/>
+	</menupopup>
+
+	<menupopup id="menu_view_tabs_popup">
+		<menuitem id="show_rconsole_tab2" class="menuitem-iconic-wide"
+			insertbefore="show_runoutput_tab2"
+			label="R Output" type="checkbox"
+      observes="show_sciviews_rconsole_tab"
+			oncommand="ko.uilayout.ensureTabShown('sciviews_rconsole_tab', true);"/> 
+	</menupopup>
+
+	<tabs id="output_tabs">
+		<tab id="sciviews_rconsole_tab" label="R Output"
+		  insertbefore="runoutput_tab"/>
+			<!--tooltiptext="A R process running locally"/>
+			onclick="sv.rconsole.run();"/>-->
+	</tabs>
+	
+	<tabpanels id="output_tabpanels">
+		<tabpanel flex="1" id="rconsole_tabpanel"
+		  insertbefore="runoutput-desc-tabpanel">	
+			<vbox flex="1" id="rconsole-desc-tabpane">
+				<hbox id="rconsole-desc-tabpanel-toolbar-hbox"
+					class="toolbar-background toolbar-hbox">
+					<vbox flex="1">
+						<spring flex="1"/>
+						<label id="rconsole-desc" style="height: 15px;"
+							flex="1" crop="center"/>
+						<spring flex="1"/>
+					</vbox>
+					<spacer flex="1"/>
+					<hbox id="rconsole-button-box" class="no-border solo-toolbaritem">
+						<toolbarbutton id="rconsole-list-button"
+							class="bulletlist-icon"
+							tooltiptext="Show R command history"
+							oncommand="sv.rconsole.toggleView();"
+							disabled="false"/>
+						<toolbarbutton id="rconsole-close-button"
+							class="find-stop-icon"
+							tooltiptext="Clear R Output"
+							oncommand="sv.cmdout.clear(true);"
+							disabled="false"/>
+						  <!-- original action: oncommand="sv.rconsole.kill(-1);"-->
+					 </hbox>
+					</hbox>
+					<vbox flex="1" id="rconsole-desc-tabpanel-vbox">
+						<hbox flex="1" id="rconsole-desc-tabpanel-hbox">
+							<deck id="rconsole-deck" selectedIndex="1" flex="1">
+								<view type="terminal"
+									id="rconsole-scintilla"
+									flex="1" style="cursor: text;"
+									onclick="sv.rconsole.scintillaOnClick(event);"/>
+								<view type="terminal"
+									id="rconsole-scintilla2"
+									flex="1" style="cursor: text;"/>
+								<tree id="rconsole-tree" flex="1" class="no-border">
+									<treecols>
+									</treecols>
+									<treechildren id="rconsole-tree-body" flex="1"/>
+								</tree>
+							</deck>
+						 </hbox>
+						 
+						 <!--<commandset id="rconsole-commandset"/>-->
+						 <hbox id="scintillaOverlayXul"/> <!--<commandset id="rconsole-commandset"/>-->
+					 </vbox>
+				 </vbox>		
+			</tabpanel>
+	</tabpanels>
+</overlay>

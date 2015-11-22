@@ -1,0 +1,227 @@
+<!ENTITY sciviews.console.tab "R Console">
+<!ENTITY sciviews.console.tip "R Console">
+<!ENTITY sciviews.console.history.filter.tip "Filter the history with a regular expression">
+
+<!ENTITY sciviews.rconsole.completion.cb.arguments "arguments">
+<!ENTITY sciviews.rconsole.completion.cb.functions "functions">
+<!ENTITY sciviews.rconsole.completion.cb.packages "packages">
+<!ENTITY sciviews.rconsole.completion.cb.history "history">
+
+<!ENTITY sciviews.rconsole.completion.cb.arguments.tip "Display function arguments">
+<!ENTITY sciviews.rconsole.completion.cb.functions.tip "Display functions">
+<!ENTITY sciviews.rconsole.completion.cb.packages.tip "Display packages">
+<!ENTITY sciviews.rconsole.completion.cb.history.tip "Display command history">
+
+<!ENTITY sciviews.rconsole.completion.settings.label "Settings">
+<!ENTITY sciviews.rconsole.completion.settings.tip "Select which completions are displayed">
+
+<!ENTITY sciviews.robjects.tab "R Objects">
+<!ENTITY sciviews.robjects.tip "R objects explorer">
+<!ENTITY sciviews.robjects.refresh "Refresh">
+<!ENTITY sciviews.robjects.refresh.tip "Refresh R objects">
+<!ENTITY sciviews.robjects.showHide "Search path">
+<!ENTITY sciviews.robjects.showHide.tip "Show/hide search path">
+<!ENTITY sciviews.robjects.filter.tip "Filter by regular expression">
+<!ENTITY sciviews.robjects.Name "Name">
+<!ENTITY sciviews.robjects.Dims "Dims">
+<!ENTITY sciviews.robjects.Group "Group">
+<!ENTITY sciviews.robjects.Class "Class">
+<!ENTITY sciviews.robjects.FullName "Full name">
+<!ENTITY sciviews.robjects.foldAll "Fold all objects of current branch">
+<!ENTITY sciviews.robjects.unfoldAll "Unfold all objects of current branch">
+
+<!ENTITY sciviews.robjects.insName "Insert name into text">
+<!ENTITY sciviews.robjects.insFullName "Insert full name into text">
+<!ENTITY sciviews.robjects.rmObj "Insert code to remove objects">
+<!ENTITY sciviews.robjects.loadPkg "Load package">
+<!ENTITY sciviews.robjects.detach "Detach package">
+<!ENTITY sciviews.robjects.clrFilter "Clear filter text">
+<!ENTITY sciviews.robjects.filterByDims "Filter dimensions">
+<!ENTITY sciviews.robjects.filterByGroup "Filter group">
+<!ENTITY sciviews.robjects.filterByClass "Filter class">
+<!ENTITY sciviews.robjects.filterByName "Filter name">
+<!ENTITY sciviews.robjects.help "Help">
+<!ENTITY sciviews.robjects.names "Names">
+<!ENTITY sciviews.robjects.str "Structure">
+<!ENTITY sciviews.robjects.plot "Plot">
+<!ENTITY sciviews.robjects.print "Print">
+<!ENTITY sciviews.robjects.summary "Summary">
+<!ENTITY sciviews.robjects.write_table "Write to textfile">
+<!ENTITY sciviews.robjects.save "Save objects">
+
+<!ENTITY sciviews.robjects.deleteNow "Delete immediately">
+<!ENTITY sciviews.robjects.deleteNow.acc "D">
+
+<!ENTITY sciviews.robjects.insertQuoted "Insert quoted">
+<!ENTITY sciviews.robjects.insertQuoted.acc "Q">
+
+<!ENTITY sciviews.robjects.selectAll "Select all">
+<!ENTITY sciviews.robjects.selectAll.acc "A">
+
+<!ENTITY sciviews.robjects.selectSiblings "Select current level">
+<!ENTITY sciviews.robjects.selectSiblings.acc "L">
+
+<!ENTITY sciviews.robjects.filterEmptyText "Filter objects...">
+
+<!ENTITY pkgMgr "Package manager">
+<!ENTITY pkgMgr.key "M">
+
+<!ENTITY rSendBlock "Run marked block">
+<!ENTITY rSendBlock.key "B">
+
+<!ENTITY rSendFile "Run all file">
+<!ENTITY rSendFile.key "A">
+
+<!ENTITY rSendFun "Run function">
+<!ENTITY rSendFun.key "F">
+
+<!ENTITY rSendLine "Run active line">
+<!ENTITY rSendLine.key "I">
+
+<!ENTITY rSendLineOrSelection "Run line/selection">
+<!ENTITY rSendLineOrSelection.key "R">
+
+<!ENTITY rSrcLineOrSelection "Source line/selection">
+<!ENTITY rSrcLineOrSelection.key "T">
+
+<!ENTITY rSendPara "Run contiguous lines">
+<!ENTITY rSendPara.key "C">
+
+<!ENTITY rSendSel "Run selection">
+<!ENTITY rSendSel.key "S">
+
+<!ENTITY rSrcBlock "Source marked block">
+<!ENTITY rSrcBlock.key "O">
+
+<!ENTITY rSrcFile "Source all file">
+<!ENTITY rSrcFile.key "I">
+
+<!ENTITY rSrcFun "Define (source) function">
+<!ENTITY rSrcFun.key "U">
+
+<!ENTITY rSrcPara "Source contiguous lines">
+<!ENTITY rSrcPara.key "O">
+
+<!ENTITY rSrcSel "Source selection">
+<!ENTITY rSrcSel.key "E">
+
+<!ENTITY ConfigureR "Configure R">
+<!ENTITY ConfigureR.key "C">
+
+<!ENTITY InstallRtoolbox "(Re)install R reference toolbox">
+<!ENTITY InstallRtoolbox.key "I">
+
+<!ENTITY UIlevel "UseR interface level">
+<!ENTITY UIlevel.key "U">
+
+<!ENTITY StartR "Start R">
+<!ENTITY StartR.key "R">
+
+<!ENTITY QuitR "Quit R">
+<!ENTITY QuitR.key "Q">
+
+<!ENTITY svBrowseWD "Working directory">
+<!ENTITY svBrowseWD.key "D">
+
+<!ENTITY svSelectRApp "Preferred R application">
+<!ENTITY svSelectRApp.key "E">
+
+<!ENTITY RUpdateCharset "Update character set">
+<!ENTITY RUpdateCharset.key "C">
+
+<!ENTITY helpStart "R help start">
+<!ENTITY helpStart.key "h">
+
+<!ENTITY svOpenSessMgr "Session directory">
+<!ENTITY svOpenSessMgr.key "S">
+
+<!ENTITY rEscape "Quit current calculation">
+<!ENTITY rEscape.key "E">
+
+<!ENTITY RToolbar.label "R Toolbar">
+<!ENTITY RToolbar.shortlabel "R">
+<!ENTITY userInterfaceShowHideRToolbar.desc "Show/Hide R toolbar">
+
+<!ENTITY rRunLineEnter "Run line and return">
+<!ENTITY rRunLineEnter.key "R">
+
+<!ENTITY rHelpContext "R help on selection">
+<!ENTITY rHelpContext.key "H">
+
+<!ENTITY rHelpSearch "R help search selection">
+<!ENTITY rHelpSearch.key "S">
+
+<!ENTITY rObjStructure "Print object structure">
+<!ENTITY rObjStructure.key "J">
+
+<!ENTITY rObjRefreshDisplay "Objects explorer">
+<!ENTITY rObjRefreshDisplay.key "P">
+
+<!ENTITY rObjList "List objects">
+<!ENTITY rObjList.key "I">
+
+<!ENTITY rObjRemove "Remove objects">
+<!ENTITY rObjRemove.key "R">
+
+<!ENTITY rActiveDF "Default data frame">
+<!ENTITY rActiveDF.key "D">
+
+<!ENTITY rLoadDF "Load data frame">
+<!ENTITY rLoadDF.key "L">
+
+<!ENTITY rActiveLM "Default linear model">
+<!ENTITY rActiveLM.key "M">
+
+<!ENTITY rListDemos "List R demos">
+<!ENTITY rListDemos.key "D">
+
+<!ENTITY rBrowseVignettes "Browse R vignettes">
+<!ENTITY rBrowseVignettes.key "B">
+
+<!ENTITY rSiteSearch "R site search selection">
+<!ENTITY rSiteSearch.key "S">
+
+<!ENTITY rRunExample "Run R example for selection">
+<!ENTITY rRunExample.key "X">
+
+<!ENTITY rClearSessionData "Clear session data and history">
+<!ENTITY rClearSessionData.key "D">
+
+<!ENTITY rWorkspaceLoad "Load workspace">
+<!ENTITY rWorkspaceLoad.key "W">
+
+<!ENTITY rWorkspaceSave "Save workspace">
+<!ENTITY rWorkspaceSave.key "V">
+
+<!ENTITY rHistoryLoad "Load history">
+<!ENTITY rHistoryLoad.key "H">
+
+<!ENTITY rHistorySave "Save history">
+<!ENTITY rHistorySave.key "Y">
+
+<!ENTITY rWDFile "Set working dir to current file">
+<!ENTITY rWDFile.key "F">
+
+<!ENTITY rWDSession "Set working dir to session">
+<!ENTITY rWDSession.key "S">
+
+<!ENTITY rWDPrevious "Set previous working dir">
+<!ENTITY rWDPrevious.key "P">
+
+<!ENTITY rNewGraph "New R graph">
+<!ENTITY rNewGraph.key "N">
+
+<!ENTITY rNextGraph "Activate next R graph">
+<!ENTITY rNextGraph.key "X">
+
+<!ENTITY rCloseGraph "Close active R graph">
+<!ENTITY rCloseGraph.key "C">
+
+<!ENTITY rCloseAllGraphs "Close all R graphs">
+<!ENTITY rCloseAllGraphs.key "A">
+
+<!ENTITY rSaveGraphPDF "Save R graph as PDF">
+<!ENTITY rSaveGraphPDF.key "S">
+
+<!ENTITY rSaveGraphPNG "Save R graph as PNG">
+<!ENTITY rSaveGraphPNG.key "P">

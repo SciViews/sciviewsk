@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+# Ph. Grosjean, 2010
+#
+# USAGE: overlay file[without .png extension]
+# Creates all overlayed versions of file.png
+
+convert "$1.png" -append "$0_add.png" -composite "$1_add.png"
+convert "$1.png" -append "$0_delete.png" -composite "$1_delete.png"
+convert "$1.png" -append "$0_edit.png" -composite "$1_edit.png"
+convert "$1.png" -append "$0_error.png" -composite "$1_error.png"
+#convert "$1.png" -append "$0_get.png" -composite "$1_get.png"
+convert "$1.png" -append "$0_go.png" -composite "$1_go.png"
+#convert "$1.png" -append "$0_key.png" -composite "$1_key.png"
+#convert "$1.png" -append "$0_lightning.png" -composite "$1_lightning.png"
+#convert "$1.png" -append "$0_link.png" -composite "$1_link.png"
+#convert "$1.png" -append "$0_start.png" -composite "$1_start.png"
+#convert "$1.png" -append "$0_stop.png" -composite "$1_stop.png"
+#convert "$1.png" -append "$0_tick.png" -composite "$1_tick.png"

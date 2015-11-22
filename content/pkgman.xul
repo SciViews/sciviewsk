@@ -1,0 +1,477 @@
+<?xml version="1.0"?>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+ Version: MPL 1.1/GPL 2.0/LGPL 2.1
+
+ The contents of this file are subject to the Mozilla Public License
+ Version 1.1 (the "License"); you may not use this file except in
+ compliance with the License. You may obtain a copy of the License at
+ http://www.mozilla.org/MPL/
+
+ Software distributed under the License is distributed on an "AS IS"
+ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ License for the specific language governing rights and limitations
+ under the License.
+
+ The Original Code is SciViews-K by Philippe Grosjean et al.
+
+ Contributor(s):
+   Kamil Barton
+   ActiveState Software Inc (code inspired from)
+
+ Alternatively, the contents of this file may be used under the terms of
+ either the GNU General Public License Version 2 or later (the "GPL"), or
+ the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ in which case the provisions of the GPL or the LGPL are applicable instead
+ of those above. If you wish to allow use of your version of this file only
+ under the terms of either the GPL or the LGPL, and not to allow others to
+ use your version of this file under the terms of the MPL, indicate your
+ decision by deleting the provisions above and replace them with the notice
+ and other provisions required by the GPL or the LGPL. If you do not delete
+ the provisions above, a recipient may use your version of this file under
+ the terms of any one of the MPL, the GPL or the LGPL.
+
+ ***** END LICENSE BLOCK ***** -->
+
+<!DOCTYPE overlay PUBLIC "-//MOZILLA//DTD XUL V1.0//EN"
+"http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"> 
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!--<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>-->
+<!--<?xml-stylesheet href="chrome://komodo/skin/bindings/buttons.css" type="text/css"?>-->
+<!--<?xml-stylesheet href="chrome://komodo/skin/bindings/sidebar.css" type="text/css"?>-->
+<!--<?xml-stylesheet href="chrome://komodo/skin/" type="text/css"?>-->
+<!--<?xml-stylesheet href="chrome://komodo/skin/global/global.css" type="text/css"?>-->
+<!--<?xml-stylesheet href="chrome://komodo/skin/bindings/scrolltabs.css" type="text/css"?>-->
+<!--<?xml-stylesheet href="chrome://mozapps/content/extensions/extensions.css" type="text/css"?>-->
+<?xml-stylesheet href="chrome://sciviewsk/skin/pkgman.css" type="text/css"?>
+
+<window id="RPackageManager"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  width="400" height="300" screenX="20" screenY="20"
+  persist="screenX screenY width height"
+  title="R Package manager (beta)">
+
+	<script type="text/javascript">
+	<![CDATA[
+		var sv, ko;
+
+		function JSONDecode (str) {
+			var nativeJSON = Components.classes["@mozilla.org/dom/json;1"]
+				.createInstance(Components.interfaces.nsIJSON);
+			try {
+				return(nativeJSON.decode(str));
+			} catch(e) {
+				return(null);
+			}
+		}
+
+		function pkgManInstall (pkg, ask) {
+			ask = ', ask='  + (ask ? 'TRUE' : 'FALSE') +
+				', installDeps=' + (ask ? 'FALSE' : 'TRUE');
+		
+			var cmd = 'cat(listToJson(pkgManInstall("'
+				+ pkg + '"' + ask + ')))';
+		
+			sv.r.evalCallback(cmd, function (res) {
+				var response = JSONDecode(res);
+				if (response == null) {
+					ko.dialogs.alert("R said:", res, document.title);
+					return;
+				} else if (response.status == "question") {
+					if (ko.dialogs.okCancel(response.message, "OK", null,
+						"R package manager") == "OK") {
+						sv.r.evalCallback('cat(listToJson(pkgManInstall("' + pkg +
+							'", ask = FALSE, install.deps = TRUE)))',
+							updateInfo, "installed");
+						doInstall = true;
+					}
+				} else if (response.status == "done") {
+					ko.dialogs.alert("R said:", response.message, document.title);
+					//alert(pkgs);
+				}
+			});
+		}
+
+		function pkgManRemove (pkg) {
+			var cmd = 'cat(listToJson(pkgManRemove("' + pkg + '")))';
+			sv.r.evalCallback(cmd, updateInfo, "removed");
+		}
+
+		function pkgManDetach (pkg) {
+			var cmd = 'cat(listToJson(pkgManDetach("' + pkg + '")))';
+			sv.r.evalCallback(cmd, updateInfo, "detached");
+		}
+
+		function pkgManLoad (pkg) {
+			var cmd = 'cat(listToJson(pkgManLoad("' + pkg + '")))';
+			sv.r.evalCallback(cmd, updateInfo, "loaded");
+		}
+
+		function updateInfo (res, what) {
+			// Add to installed / reload installed
+			// Update items in Available
+			// Remove from Updates
+			//ko.dialogs.alert(what, res);
+			var avpList = document.getElementById("rAvailablePackageList");
+			var instList = document.getElementById("rPackageList");
+
+			switch(what) {
+			 case "installed":
+				response = JSONDecode(res);
+				if (response == null) {
+					ko.dialogs.alert("R said:", res, document.title + " updateInfo");
+					return;
+				}
+
+				var pkgs = response.packages;
+				if (typeof pkgs == "string") pkgs = [pkgs];
+		
+				if (response.message)
+					ko.dialogs.alert("R said:" + what, response.message.join("\n"),
+						document.title + " updateInfo");
+
+				var packageName, items;
+				for (var i in pkgs) {
+					packageName = pkgs[i];
+					items = avpList.getElementsByAttribute("label", packageName);
+					if (items.length == 0) continue;
+					for (var j = 0; j < items.length; j++) {
+						//alert("updating: " + packageName);
+						items[j].setAttribute("installedVersion",
+							items[j].getAttribute("version"));
+						items[j].setAttribute("installed", true);
+					}
+				}
+				getInstalledPkgs();
+				break;
+			
+			 case "removed":
+				response = JSONDecode(res);
+				if (response == null) {
+					ko.dialogs.alert("Something went wrong...", res, document.title
+						+ " updateInfo");
+					return;
+				}
+				var items, changedCount = 0;
+				for (var packageName in response) {
+					if (response[packageName] == "TRUE") {
+						changedCount++;
+						items = avpList.getElementsByAttribute("label", packageName);
+						if (items.length == 0) continue;
+						for (var j = 0; j < items.length; j++) {
+							items[j].removeAttribute("installed");
+							items[j].setAttribute("installedVersion", "");
+						}
+					}
+				}
+				if (changedCount > 0) getInstalledPkgs();
+				break;
+			
+			 case "loaded":
+				getInstalledPkgs();
+				break;
+			
+			 case "detached":
+				response = JSONDecode(res);
+				if (response == null) {
+					ko.dialogs.alert("Something went wrong...", res, document.title
+						+ " updateInfo");
+					return;
+				}
+				var items, changedCount = 0;
+				var errors = [];
+				for (var packageName in response) {
+					if (response[packageName] == "TRUE") {
+						changedCount++;
+						items = avpList.getElementsByAttribute("label", packageName);
+						if (items.length == 0) continue;
+						for (var j = 0; j < items.length; j++) {
+							items[j].removeAttribute("loaded");
+						}
+					} else {
+						errors.push(packageName + ": " + response[packageName])
+					}
+				}
+				if (changedCount > 0) getInstalledPkgs();
+				if (errors.length > 0)
+					ko.dialogs.alert("By detaching the packages, R said:",
+						errors.join("\n"),  document.title);
+				break;
+			
+			 default:
+			}
+		}
+
+		function getDescriptionFor (el) {
+			var pkg = el.label;
+			sv.r.evalCallback('pkgManDescribe("' + pkg + '")',
+				function (desc, el) {
+					el.desc = desc;
+				},
+			el);
+		};
+
+		function setCranMirror (url) {
+			if (!url) url = sv.pref.getPref("r.cran.mirror").trim();
+			try {
+				sv.r.eval("pkgManSetCRANMirror(\"" + url + "\")");
+			} catch(e) {
+				return;
+			}
+			var selectedCranMirror = document.getElementById('selectedCranMirror');
+			if (selectedCranMirror) selectedCranMirror.value = url;
+		}
+
+		function populateCranMirrorsList (rOutput) {
+			var lines = rOutput.split(/[\r\n]+/);
+			var mirror = sv.pref.getPref("r.cran.mirror").trim();
+			var rl = document.getElementById("rCRANMirrorsList");
+			var sel = -1;
+			for (var i = 0; i < lines.length; i++) {
+				l = lines[i].trim().split(';');
+				var row = document.createElement('listitem');
+				row.setAttribute('value', l[1]);
+				var cell = document.createElement('listcell');
+				cell.setAttribute('label', l[0]);
+				cell.setAttribute('image', "chrome://sciviewsk/skin/images/flags/"
+					+ l[2] + ".gif");
+				cell.className = "listcell-iconic";
+				row.appendChild(cell);
+				cell = document.createElement('listcell');
+				cell.setAttribute('label', l[1]);
+				row.appendChild(cell);
+				if (l[1].indexOf(mirror) > -1) sel = i;
+				rl.appendChild(row);
+			}
+			var it = rl.getItemAtIndex(sel);
+			rl.scrollToIndex(sel);
+			rl.ensureIndexIsVisible(sel);
+			//rl.timedSelect(it, 10);
+			rl.selectItem(it);
+		}
+
+		function getCranMirrors () {
+			sv.r.evalCallback("pkgManGetMirrors()", populateCranMirrorsList);
+		}
+
+		function makePkgItem (name, version, installedVersion, status, installed,
+		old, loaded) {
+			var item = document.createElement("richlistitem");
+			item.setAttribute("label", name);
+			item.setAttribute("version", version);
+			if (installedVersion)
+				item.setAttribute("installedVersion", installedVersion);
+			if (status) item.setAttribute("status", status);
+			if (installed) item.setAttribute("installed", installed);
+			if (old) item.setAttribute("old", old);
+			if (loaded) item.setAttribute("loaded", loaded);
+			return(item);
+		}
+
+		function getInstalledPkgs () {
+			sv.r.evalCallback("pkgManGetInstalled()", populateInstalledPkgs);
+		}
+
+		function populateInstalledPkgs (rOutput) {
+			if (!rOutput || rOutput == 'NULL') return;
+			var lines = rOutput.split(/[\r\n]+/);
+
+			rl = document.getElementById("rPackageList");
+			var selectedIndex, selectedItem, selectedLabel;
+
+			selectedIndex = rl.selectedIndex;
+			selectedItem = rl.getSelectedItem(0);
+			if (selectedItem != null) selectedLabel = selectedItem.label;
+		
+			while (rl.itemCount) rl.removeItemAt(0);
+			for (var i = 0; i < lines.length; i++) {
+				l = lines[i].trim().split(';');
+				rl.appendChild(makePkgItem(l[0], l[1], null, null, true, null,
+					l[3] == 'TRUE'));
+			}
+
+			if (selectedIndex != -1) {
+				for (var i = 0; i < rl.itemCount; i++) {
+					if (rl.getItemAtIndex(i).label == selectedLabel) {
+						rl.selectedIndex = i;
+						break;
+					}
+				}
+			}
+		}
+
+		function getAvailablePkgs (page, reload) {
+			var rl = document.getElementById("rAvailablePackageList");
+		
+			if (!page) {
+				page = '';
+			} else if (page == "next") {
+				rl.scrollToIndex(0);
+			} else if (page == "prev") {
+				rl.scrollToIndex(rl.getRowCount() - 1);
+			}
+
+			var searchPattern = document.getElementById('searchfield').value.trim();
+			searchPattern = sv.string.toRegex(searchPattern);
+			sv.r.evalCallback('pkgManGetAvailable("' + page + '", pattern = "' +
+				searchPattern + '", reload = ' + (reload ? 'TRUE': 'FALSE') + ')',
+				populateAvailablePkgs);
+		}
+
+		function populateAvailablePkgs (rOutput) {
+			var lines = rOutput.trim();
+			if (lines == 'NULL') return;
+			lines = lines.split(/\t[\r\n]+/);
+
+			var rl = document.getElementById("rAvailablePackageList");
+			while (rl.itemCount) rl.removeItemAt(0);
+
+			idx = lines[0].trim().split(" ").map(function (x) parseInt(x));
+			var item;
+			var prevButton = document.getElementById('availablePackagesPrevButton');
+			if (idx[0] > 1) {
+				item = document.createElement("richlistitem");
+				item.setAttribute("class", "navButton");
+				item.setAttribute("oncommand", "getAvailablePkgs('prev')");
+				rl.appendChild(item);
+				prevButton.disabled = false;
+			} else {
+				prevButton.disabled = true;
+			}
+			for (var i = 1; i < lines.length; i++) {
+				l = lines[i].trim().split(';');
+				rl.appendChild(makePkgItem(l[0], l[1], l[2], l[3], l[3] != '',
+					l[3] == '1'));
+			}
+	
+			var nextButton = document.getElementById('availablePackagesNextButton');
+			if (idx[1] < idx[2]) {
+				item = document.createElement("richlistitem");
+				item.setAttribute("class",  "navButton");
+				item.setAttribute("oncommand", "getAvailablePkgs('next')");
+				rl.appendChild(item);
+				nextButton.disabled = false;
+			} else {
+				nextButton.disabled = true;
+			}
+			var info = document.getElementById('availablePackagesInfo');
+			info.value = ' Showing packages '  + idx[0] + "-" + idx[1]  + ' of '
+				+ idx[2] + ' total (from "' + lines[1].split(';', 1) + '" to "'
+				+ lines[lines.length-1].split(';', 1) + '")'
+		}
+
+		function init () {
+//			var rDir = sv.tools.file.path("ProfD", "extensions", "sciviewsk@sciviews.org",
+//				"R", "pkgman.R");
+//			sv.r.evalHidden('if (!exists("pkgManGetInstalled", ' +
+//				'as.environment("komodoConnection"))) ' +
+//				'sys.source("' + sv.string.addslashes(rDir) +
+//				'", as.environment("komodoConnection"));');
+			//sv.r.eval('sys.source("' + sv.string.addslashes(rDir)
+			//	+ '", as.environment("komodoConnection"));');
+			setCranMirror();
+			getCranMirrors();
+			getAvailablePkgs("first", true);
+			getInstalledPkgs();
+		}
+
+		function pkgMgrOnLoad (event) {
+			var p = parent;
+			while (p = p.opener) {
+				if (p.ko) {
+					sv = p.sv;
+					ko = p.ko;
+					break;
+				}
+			}
+
+			if (sv.r.running) {
+				window.setTimeout(init, 256);
+			} else {
+				ko.dialogs.alert("R must be started to manage its packages.",
+					null, "R package manager");
+				self.close();
+			}
+		}
+
+		addEventListener("load", pkgMgrOnLoad, false);
+		]]>
+	</script>
+
+	<hbox id="topStackBar">
+		<radiogroup id="viewGroup" orient="horizontal" flex="2">
+			<radio id="search-view" label="Available"
+				oncommand="document.getElementById('pkgPanels').selectedIndex = 0;"/>
+			<radio id="extensions-view" label="Installed"
+				oncommand="document.getElementById('pkgPanels').selectedIndex = 1;"/>
+			<radio id="updates-view" label="Updates"
+				oncommand="document.getElementById('pkgPanels').selectedIndex = 2;"
+				disabled="true"/>
+			<radio id="mirrors-view" label="CRAN mirrors" selected="true"
+				oncommand="document.getElementById('pkgPanels').selectedIndex = 3;"/>
+		</radiogroup>
+
+		<spacer/>
+
+		<button label="Close" onclick="self.close();"/>
+	</hbox>
+
+	<deck id="pkgPanels" flex="1" style="padding: 0px; border: 0px black solid;"
+		persists="selectedIndex" selectedIndex="3">
+		<box>
+			<vbox flex="1">
+				<hbox id="searchPanel" align="center">
+					<textbox id="searchfield" emptytext="Search packages" type="search"
+						searchbutton="true" class="compact"
+						oncommand="getAvailablePkgs('current')"/>
+					<spacer flex="1"/>
+					<button label="Prev" id="availablePackagesPrevButton"
+						oncommand="getAvailablePkgs('prev')"/>
+					<button label="Next" id="availablePackagesNextButton"
+						oncommand="getAvailablePkgs('next')"/>
+				</hbox>
+				
+				<hbox>
+					<label id="availablePackagesInfo" value="Bla bla bla" />
+				</hbox>
+
+				<hbox flex="1">
+					<richlistbox id="rAvailablePackageList"
+						class="rPackageList" flex="1"/>
+				</hbox>
+			</vbox>
+		</box>
+
+		<box>
+			<hbox flex="1">
+				<richlistbox id="rPackageList" class="rPackageList" flex="1"/>
+			</hbox>
+		</box>
+
+		<box>
+			<label id="wtf1" value=""/>
+		</box>
+
+		<vbox>
+			<hbox>
+				<label value="Selected mirror: "/>
+				<label id="selectedCranMirror" value=""/>
+			</hbox>
+
+			<hbox flex="1">
+				<listbox id="rCRANMirrorsList" suppressonselect="false" flex="1"
+					onclick="setCranMirror(this.selectedItem.value)">
+					<listhead>
+						<listheader label="Name" width="100"/>
+						<listheader label="URL" width="150"/>
+					</listhead>
+					<listcols>
+						<listcol flex="1"/>
+						<listcol flex="1"/>
+					</listcols>
+				</listbox>
+			</hbox>
+		</vbox>
+	</deck>
+</window>

@@ -1,0 +1,15 @@
+{
+  "keyboard_shortcut": "", 
+  "name": "Docs - Extensions", 
+  "language": "JavaScript", 
+  "trigger_enabled": false, 
+  "value": [
+    "ko.help.open('komodo_extensions');"
+  ], 
+  "trigger": "trigger_postopen", 
+  "rank": 100, 
+  "version": "1.0.12", 
+  "async": 1, 
+  "type": "macro", 
+  "icon": "chrome://fugue/skin/icons/information-white.png"
+}

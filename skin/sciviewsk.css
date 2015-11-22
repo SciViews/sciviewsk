@@ -1,0 +1,348 @@
+.r-run-command-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/R.png");
+}
+
+.r-run-command-icon[disabled="true"] {
+	list-style-image: url("chrome://sciviewsk/skin/images/R_disabled.png");
+}
+
+.r-quit-command-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/quitR.png");
+}
+
+.r-pkg-manager {
+	list-style-image: url("chrome://sciviewsk/skin/images/package_manager.png");
+}
+
+.r-working-dir-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/folder_home.png");
+}
+
+.r-session-dir-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/folder_wrench.png");
+}
+
+.r-run-all-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_all.png");
+}
+
+.r-run-selection-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_line.png");
+}
+
+.r-run-selection-enter-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_enter.png");
+}
+
+.r-run-block-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_block.png");
+}
+
+.r-run-function-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_function.png");
+}
+
+.r-run-line-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_line.png");
+}
+
+.r-run-para-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/run_para.png");
+}
+
+.r-source-all-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/source.png");
+}
+
+.r-source-selection-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/source_sel.png");
+}
+
+.r-source-block-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/source_block.png");
+}
+
+.r-source-function-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/source_function.png");
+}
+
+.r-source-line-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/source_sel.png");
+}
+
+.r-source-para-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/source_para.png");
+}
+
+.r-help-context-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/help_red.png");
+}
+
+.r-help-search-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/find.png");
+}
+
+.r-load-df-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/data.frame_go.png");
+}
+
+.r-active-df-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/data.frame_tick.png");
+}
+
+.r-active-lm-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/object_tick.png");
+}
+
+.robjects-pkg-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/package.png");
+}
+
+.r-pkg-load-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/package_go.png");
+}
+
+.r-pkg-unload-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/package_stop.png");
+}
+
+.r-pkg-install-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/package_install.png");
+}
+
+.r-pkg-install-local-icon{
+	list-style-image: url("chrome://sciviewsk/skin/images/package_add.png");
+}
+
+.r-pkg-update-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/package_green.png");
+}
+
+.r-pkg-remove-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/package_delete.png");
+}
+
+.r-cran-mirror-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/globe-network.png");
+}
+
+.r-repositories-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/briefcase.png");
+}
+
+.r-data-attach {
+	list-style-image: url("chrome://sciviewsk/skin/images/database_link.png");
+}
+
+.searchPath-icon{
+	list-style-image: url("chrome://komodo/skin/images/bulletlist.png");
+}
+
+/*.searchPath-icon:hover{
+	list-style-image : url("chrome://komodo/skin/images/bulletlist_hover.png");
+}*/
+
+.refresh-icon{
+	list-style-image: url("chrome://komodo/skin/global/images/refresh.png");
+}
+
+.r-escape-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/r_escape.png");
+}
+
+.r-objects-filter {
+	list-style-image: url("chrome://sciviewsk/skin/images/filter.png");
+}
+
+.r-objects-filter:hover,
+.r-objects-filter:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/filter-a.png");
+}
+
+.robjects-fold-all-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/toggle_close.png");
+}
+
+.robjects-expand-all-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/toggle_open.png");
+}
+
+.find-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/find.png");
+}
+
+.home-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/house.png");
+}
+
+.home-icon:hover,
+.home-icon:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/house_a.png");
+}
+
+.r-web-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/world_link.png");
+}
+
+.go-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/play_green.png");
+}
+
+.go-icon:hover,
+.go-icon:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/play_blue.png");
+}
+
+.search-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/lightbulb.png");
+}
+
+.search-icon:hover,
+.search-icon:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/lightbulb_off.png");
+}
+
+
+.stop-icon {
+	list-style-image: url("chrome://sciviewsk/skin/images/stop.png");
+}
+
+.stop-icon:hover,
+.stop-icon:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/stop_a.png");
+}
+
+.stop-icon[disabled="true"],
+.stop-icon[disabled="true"]:hover,
+.stop-icon[disabled="true"]:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/stop_disabled.png");
+}
+
+.reload-icon {
+  list-style-image: url("chrome://sciviewsk/skin/images/arrow_refresh.png");
+}
+
+.reload-icon:hover {
+  list-style-image : url("chrome://sciviewsk/skin/images/arrow_refresh_hover.png");
+}
+
+.reload-icon[disabled="true"],
+.reload-icon[disabled="true"]:hover,
+.reload-icon[disabled="true"]:hover:active {
+  list-style-image : url("chrome://sciviewsk/skin/images/arrow_refresh_disabled.png");
+}
+
+.r-escape-icon[disabled="true"],
+.r-escape-icon[disabled="true"]:hover,
+.r-escape-icon[disabled="true"]:hover:active {
+	list-style-image: url("chrome://sciviewsk/skin/images/r_escape_disable.png");
+}
+
+#sciviews_robjects_objects_tree treecol#r-dims {
+	text-align: right;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-indentation {
+	width: 15px;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-image(icon) {
+	list-style-image: url("chrome://sciviewsk/skin/images/empty.png");
+	padding-right: 8px;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-indentation(type-sub-object) {
+	width: 15px;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-row(type-sub-object) {
+	background-color: #eeeeee;
+} /* rgba(157, 130, 190, 0.3); */
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-row(type-args) {
+	background-color: #f1f1f8;
+} /* rgba(215, 150, 230, 0.3); */
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-row(lastChild) {
+	border-bottom: 1px #d7dde1 solid;
+} /* 1px ButtonHighlight solid; */
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-row(firstChild) {
+	border-top: 1px #d7dde1 solid;
+} /* 1px ButtonShadow solid; */
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(type-sub-object) {
+	color: #0000a0;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(type-args) {
+	font-style: italic;
+	color: #800000;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(default-value) {
+	font-style: italic;
+	color: #800040;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(class-package) {
+	font-weight: bold;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(empty_package) {
+	color: #808080;
+	font-style: italic;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(group-function) {
+	color: #333399;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-line {
+	visibility: visible;
+	border: 1px dotted ButtonShadow;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-line(type-args) {
+	visibility: visible;
+	border: 1px dotted #984ff2;
+} /* 1px dotted ThreeDHighlight; */
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-row(selected) {
+	background-color: Highlight;
+}
+
+#sciviews_robjects_objects_tree treechildren::-moz-tree-cell-text(selected) {
+	color: HighlightText;
+}
+
+#sciviews_robjects_filterbox {
+	margin: 4px 4px 2px 2px;
+	/*min-width: 40px;
+	max-width: 200px;*/
+}
+
+#sciviews_robjects_filterbox.badRegEx {
+	color: #ea0000;
+}
+
+.languageicon[language="R"],
+treechildren::-moz-tree-image(LanguageR) {
+  list-style-image: url("chrome://sciviewsk/skin/images/R.png");
+}
+
+/*.tab-icon {
+    display: none;
+}*/
+/*.tab-image-left {
+    background-image: url("chrome://famfamfamsilk/skin/icons/page.png") !important;
+    width: 16px !important;
+    height: 16px !important;
+}
+#tabbed-view tabs > tab[label$=".R"] .tab-image-left {
+    background-image: url("chrome://sciviewsk/skin/images/R_doc.png") !important;
+}*/
+/* This does not work!
+#tabbed-view tabs > tab[label$=".R"] .tab-icon {
+    background-image: url("chrome://sciviewsk/skin/images/R_doc.png") !important;
+}*/

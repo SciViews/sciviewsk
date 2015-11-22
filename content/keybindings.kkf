@@ -1,0 +1,29 @@
+version 19
+
+# SciViews-K default keybindings
+# will be applied if no other key has been assigned by user, and if a key
+# combination is not used. Commands' ids must start with "cmd_sv" and be
+# defined in the XUL overlay.
+# Copyright (c) 2010-2012, Ph. Grosjean & K. Barton
+# License: MPL 1.1/GPL 2.0/LGPL 2.1
+
+binding cmd_svStartR Ctrl+Shift+F10
+
+binding cmd_svBrowseWD F7
+#binding cmd_svSessionMgr F6
+#binding cmd_svRCheckPackage F4
+
+binding cmd_svRRunLineOrSelection Ctrl+Shift+R
+binding cmd_svRRunLineEnter Ctrl+Shift+Return
+binding cmd_svRRunPara Ctrl+Shift+C
+binding cmd_svRRunBlock Ctrl+Shift+Y
+binding cmd_svRSourceFunction Ctrl+Shift+D
+binding cmd_svRSourceAll Ctrl+Shift+A
+binding cmd_svREscape Ctrl+Shift+Q
+
+binding cmd_svRHelpContext Alt+F1
+binding cmd_svRHelpSearch Alt+Shift+F1
+
+binding cmd_svRObjRefreshDisplay Ctrl+P
+binding cmd_svRActiveDF Ctrl+D
+#No! cmd_gotoLine?! binding cmd_svRLoadDF Ctrl+L

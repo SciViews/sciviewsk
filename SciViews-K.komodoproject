@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="6200c0ed-45ec-4f46-a159-284803d65c04" kpf_version="5" name="SciViews-K.komodoproject">
+<file id="46c370a6-978b-4513-9cb8-056aebcf01f3" idref="aeee779f-9156-4b41-be2d-675d32098ff1" name="setup.xul" url="_prj_internal_/setup.xul">
+</file>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/wrench.png" id="51c7310c-805d-4bcb-af72-57b51804be23" idref="aeee779f-9156-4b41-be2d-675d32098ff1" keyboard_shortcut="" language="JavaScript" name="Configure" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+</macro>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/lightning_go.png" id="a9aadbbc-4089-4c4e-b7ed-87089102aa06" idref="aeee779f-9156-4b41-be2d-675d32098ff1" keyboard_shortcut="" language="JavaScript" name="Build" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+</macro>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/brick.png" id="ff0456a2-4546-480a-897e-6bc9f30d58a2" idref="aeee779f-9156-4b41-be2d-675d32098ff1" keyboard_shortcut="" language="JavaScript" name="extension_lib" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+</macro>
+<file id="1d542d8f-6043-4618-85b2-750f688afb86" idref="fd57ad7e-32b5-46a5-8b5a-36f513b953ad" name="setup.xul" url="_prj_internal_/setup.xul">
+</file>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/wrench.png" id="45c63c14-27f6-4b60-b387-43ea4946597f" idref="fd57ad7e-32b5-46a5-8b5a-36f513b953ad" keyboard_shortcut="" language="JavaScript" name="Configure" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+</macro>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/lightning_go.png" id="4b74a155-8acd-4a55-97e9-f193ab92dc4a" idref="fd57ad7e-32b5-46a5-8b5a-36f513b953ad" keyboard_shortcut="" language="JavaScript" name="Build" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+</macro>
+<macro async="0" icon="chrome://famfamfamsilk/skin/icons/brick.png" id="a2c99057-bcb3-43d5-8284-66628a53eadb" idref="fd57ad7e-32b5-46a5-8b5a-36f513b953ad" keyboard_shortcut="" language="JavaScript" name="extension_lib" rank="100" trigger="trigger_postopen" trigger_enabled="0">
+</macro>
+<preference-set idref="6200c0ed-45ec-4f46-a159-284803d65c04" id="project" preftype="project">
+  <boolean id="configured">1</boolean>
+  <boolean id="editUseLinting">1</boolean>
+  <string relative="path" id="import_dirname"></string>
+  <string id="import_exclude_matches">*.*~;*.bak;*.tmp;CVS;.#*;*.pyo;*.pyc;.svn;*%25*;tmp*.html;.DS_Store;.komodotools</string>
+  <string id="import_include_matches"></string>
+  <boolean id="import_live">1</boolean>
+  <boolean id="import_recursive">1</boolean>
+  <string id="import_type">useFolders</string>
+  <string id="jshintOptions"></string>
+  <string id="jshint_linter_chooser">default</string>
+  <string id="jshint_linter_specific"></string>
+  <string id="jslintOptions"></string>
+  <string id="jslint_linter_chooser">default</string>
+  <string id="jslint_linter_specific"></string>
+  <boolean id="lintClearOnTextChange">0</boolean>
+  <long id="lintDelay">1000</long>
+  <boolean id="lintEOLs">1</boolean>
+  <boolean id="lintHTML5Lib">0</boolean>
+  <boolean id="lintHTMLTidy">1</boolean>
+  <boolean id="lintHTML_CheckWith_Perl_HTML_Lint">0</boolean>
+  <boolean id="lintHTML_CheckWith_Perl_HTML_Tidy">0</boolean>
+  <boolean id="lintJavaScriptEnableStrict">1</boolean>
+  <boolean id="lintJavaScriptEnableWarnings">1</boolean>
+  <boolean id="lintJavaScript_SpiderMonkey">1</boolean>
+  <boolean id="lintWithJSHint">0</boolean>
+  <boolean id="lintWithJSLint">0</boolean>
+  <boolean id="lint_coffee_script">0</boolean>
+  <boolean id="lint_python3_with_pychecker3">0</boolean>
+  <boolean id="lint_python3_with_pyflakes3">0</boolean>
+  <boolean id="lint_python3_with_pylint3">0</boolean>
+  <boolean id="lint_python3_with_standard_python">1</boolean>
+  <boolean id="lint_python_with_pychecker">0</boolean>
+  <boolean id="lint_python_with_pyflakes">0</boolean>
+  <boolean id="lint_python_with_pylint">0</boolean>
+  <boolean id="lint_python_with_standard_python">1</boolean>
+  <string id="perl_lintOption">cw</string>
+  <boolean id="perl_lintOption_disableBeginBlocks">1</boolean>
+  <boolean id="perl_lintOption_includeCurrentDirForLinter">1</boolean>
+  <string id="perl_lintOption_perlCriticLevel">off</string>
+  <long id="prefs_version">1</long>
+  <string id="pychecker3_checking_rcfile"></string>
+  <string id="pychecker3_wrapper_location"></string>
+  <string id="pychecker_checking_rcfile"></string>
+  <string id="pychecker_wrapper_location"></string>
+  <string id="pylint3_checking_rcfile"></string>
+  <string id="pylint_checking_rcfile"></string>
+  <string id="ruby_lintOption">cwT</string>
+  <string id="tidy_accessibility">0</string>
+  <string id="tidy_configpath"></string>
+  <string id="tidy_errorlevel">errors</string>
+</preference-set>
+</project>
